@@ -8,6 +8,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C63E9C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collinson.Logging.WebApi", "src\Package.Logging.WebApi\Collinson.Logging.WebApi.csproj", "{C3430DD9-6C11-43FA-89E6-CFE0654B2D1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Unit", "Tests.Unit\Tests.Unit.csproj", "{F4C8BBFB-5288-458B-9381-DDDBA3D65BD5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +20,10 @@ Global
 		{C3430DD9-6C11-43FA-89E6-CFE0654B2D1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3430DD9-6C11-43FA-89E6-CFE0654B2D1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3430DD9-6C11-43FA-89E6-CFE0654B2D1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4C8BBFB-5288-458B-9381-DDDBA3D65BD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4C8BBFB-5288-458B-9381-DDDBA3D65BD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4C8BBFB-5288-458B-9381-DDDBA3D65BD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4C8BBFB-5288-458B-9381-DDDBA3D65BD5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
