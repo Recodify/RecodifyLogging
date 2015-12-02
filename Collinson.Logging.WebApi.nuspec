@@ -7,22 +7,13 @@
     <description>A delegated handler to log requests/responses</description>
     <tags>Collinson Logging WebApi</tags>
     <language>en-GB</language>
-    <frameworkAssemblies>
-      <frameworkAssembly assemblyName="System" targetFramework="net45" />
-      <frameworkAssembly assemblyName="System.Core" targetFramework="net45" />
-      <frameworkAssembly assemblyName="System.Configuration" targetFramework="net45" />
-      <frameworkAssembly assemblyName="System.Xml" targetFramework="net45" />
-    </frameworkAssemblies>
+    <frameworkAssemblies/>
     <references>
       <reference file="Collinson.Logging.WebApi.dll" />
     </references>
     <dependencies>
 	  <dependency id="Collinson.Extensions" version="1.0.0.68" />
       <dependency id="Collinson.Logging.Trace" version="1.0.3-master477a861" />
-      <dependency id="Microsoft.AspNet.WebApi" version="5.2.3" />
-      <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.3" />
-      <dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.3" />
-      <dependency id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" />
       <dependency id="Newtonsoft.Json" version="7.0.1" />
     </dependencies>
   </metadata>
