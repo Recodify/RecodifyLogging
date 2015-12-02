@@ -12,7 +12,7 @@ Getting Started
 
 To begin using:
 
-1. `Install-Package Collinson.Logging.WebApi`
+1. `Install-Package Collinson.Logging.WebApi -Pre`
 2. Within your `WebApiConfig.cs` do the following (You can also use the general `TraceSouce` if data sanitisation is not required)
 3. See below:
 
