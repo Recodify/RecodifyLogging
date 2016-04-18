@@ -1,4 +1,4 @@
-﻿namespace Collinson.Logging.WebApi
+﻿namespace Recodify.Logging.WebApi
 {
     public interface IContext
     {

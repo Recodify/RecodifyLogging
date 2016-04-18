@@ -1,6 +1,4 @@
-﻿using Collinson.Extensions.SimpleTypes;
-
-namespace Collinson.Logging.WebApi
+﻿namespace Recodify.Logging.WebApi
 {
     public class HttpContext : IContext
     {
@@ -20,7 +18,7 @@ namespace Collinson.Logging.WebApi
 
             var context = GetUrlContext();
 
-            return "http.{0}.{1}".InvariantFormat(System.Web.HttpContext.Current.Request.HttpMethod, context);
+            return $"http.{System.Web.HttpContext.Current.Request.HttpMethod}.{context}";
         }
 
         public string GetFullUrlWithMethod()

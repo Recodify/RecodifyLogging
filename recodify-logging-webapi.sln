@@ -1,14 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C63E9C50-5D0F-458D-931B-A42D73762604}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Collinson.Logging.WebApi", "src\Package.Logging.WebApi\Collinson.Logging.WebApi.csproj", "{C3430DD9-6C11-43FA-89E6-CFE0654B2D1A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recodify.Logging.WebApi", "src\Package.Logging.WebApi\Recodify.Logging.WebApi.csproj", "{C3430DD9-6C11-43FA-89E6-CFE0654B2D1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Unit", "Tests.Unit\Tests.Unit.csproj", "{F4C8BBFB-5288-458B-9381-DDDBA3D65BD5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recodify.Logging.Trace", "src\Package.Logging.Trace\Recodify.Logging.Trace.csproj", "{71597ACC-4578-49D6-AA17-DC5C324476CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +19,10 @@ Global
 		{C3430DD9-6C11-43FA-89E6-CFE0654B2D1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3430DD9-6C11-43FA-89E6-CFE0654B2D1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3430DD9-6C11-43FA-89E6-CFE0654B2D1A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F4C8BBFB-5288-458B-9381-DDDBA3D65BD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F4C8BBFB-5288-458B-9381-DDDBA3D65BD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4C8BBFB-5288-458B-9381-DDDBA3D65BD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F4C8BBFB-5288-458B-9381-DDDBA3D65BD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71597ACC-4578-49D6-AA17-DC5C324476CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71597ACC-4578-49D6-AA17-DC5C324476CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71597ACC-4578-49D6-AA17-DC5C324476CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71597ACC-4578-49D6-AA17-DC5C324476CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

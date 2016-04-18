@@ -1,4 +1,4 @@
-Collinson Logging Web API
+Recodify Logging
 =========================
 
 This library can be used to add logging to existing Web API 2.2 projects. 
@@ -12,7 +12,7 @@ Getting Started
 
 To begin using:
 
-1. `Install-Package Collinson.Logging.WebApi -Pre`
+1. `Install-Package Recodify.Logging.WebApi -Pre`
 2. Within your `WebApiConfig.cs` do the following (You can also use the general `TraceSouce` if data sanitisation is not required)
 3. See below:
 
@@ -28,7 +28,4 @@ To begin using:
         }
     }
 
-Dependencies
-------------
 
-See: http://collinson.nuget.latitude-dev.local/packages/Collinson.Logging.WebApi/

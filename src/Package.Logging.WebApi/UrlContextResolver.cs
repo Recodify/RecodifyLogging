@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Collinson.Logging.WebApi
+namespace Recodify.Logging.WebApi
 {
     public class UrlContextResolver
     {

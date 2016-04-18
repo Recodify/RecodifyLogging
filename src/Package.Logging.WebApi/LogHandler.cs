@@ -1,10 +1,10 @@
-﻿using Collinson.Logging.Trace;
+﻿using Recodify.Logging.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Collinson.Logging.WebApi
+namespace Recodify.Logging.WebApi
 {
     public class LogHandler : DelegatingHandler
     {

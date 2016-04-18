@@ -80,7 +80,6 @@ publish
 
 # NuGet Packages Directory
 packages/*
-!packages/Collinson.OneBuild.0.0.11
 !packages/Invoke-Build.2.9.12
 !packages/NuGet.CommandLine.2.7.3
 !packages/NUnit.Runners.2.6.3
