@@ -4,5 +4,6 @@
     {
         string GetContextString();
         string GetFullUrlWithMethod();
+        string GetSessionId();
     }
 }

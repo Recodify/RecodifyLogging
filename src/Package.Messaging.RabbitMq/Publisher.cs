@@ -29,7 +29,7 @@ namespace Recodify.Messaging.RabbitMq
             var json = JsonConvert.SerializeObject(message, Formatting.Indented, jsonSettings);
             var jsonBytes = Encoding.UTF8.GetBytes(json);
 
-            AdvancedBus.Publish(EventExchange, "#", mandatory: true, immediate: false, messageProperties: properties, body: jsonBytes);
+            AdvancedBus.Publish(EventExchange, "#", mandatory: false, immediate: false, messageProperties: properties, body: jsonBytes);
         }
 
 	    public IEnumerable<QueueInfo> GetQueueInfos()

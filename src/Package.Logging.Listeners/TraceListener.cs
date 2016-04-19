@@ -15,6 +15,8 @@ namespace Recodify.Logging.Listeners.RabbitMq
         private const string requestIdKey = "RequestId";
         private readonly string machineName = Environment.MachineName;
         private readonly IPublisher publisher;
+        private readonly string componentName;
+        private readonly TraceSource fallbackSource;
 
         [ResourceExposure(ResourceScope.Machine)]
         [ResourceConsumption(ResourceScope.Machine)]
@@ -26,6 +28,9 @@ namespace Recodify.Logging.Listeners.RabbitMq
             var initData = data.Split(',');
             var exchangeName = initData.First();
             var queueName = initData.Skip(1).First();
+            componentName = initData.Last();
+
+            fallbackSource = new TraceSource("Fallback");
 
             var busFactory = new BusFactory();
             publisher = new Publisher(busFactory, new EventLogSettings { ExchangeName = exchangeName, QueueName = queueName});
@@ -159,13 +164,27 @@ namespace Recodify.Logging.Listeners.RabbitMq
 
         private void Publish(IDictionary<string, object> log)
         {
-            publisher.Publish(log);
+            try
+            {
+                publisher.Publish(log);
+            }
+            catch(Exception exp)
+            {
+                fallbackSource.TraceData(TraceEventType.Error, 9883, exp);
+            }
         }
 
         private void Publish(TraceLog log)
         {
-            publisher.Publish(log);
-        }
+            try
+            {
+                publisher.Publish(log);
+            }
+            catch (Exception exp)
+            {
+                fallbackSource.TraceData(TraceEventType.Error, 9883, exp);
+            }
+        }        
 
         private void WriteHeader(String source, TraceEventType eventType, int id, TraceEventCache eventCache, Guid relatedActivityId, DateTime eventTimeStamp, TraceLog log)
         {
@@ -185,14 +204,14 @@ namespace Recodify.Logging.Listeners.RabbitMq
         }
 
         private void WriteHeaderDetail(String source, TraceEventType eventType, int id, TraceEventCache eventCache, TraceLog log)
-        {
+        {            
             var sev = (int)eventType;
             if (sev > 255)
                 sev = 255;
             if (sev < 0)
                 sev = 0;
 
-            log.Component = "Api";
+            log.Component = componentName;
             log.Host = GetHostHeader();
             log.UrlLocalPath = GetRequestLocalPath();
             log.EventId = ((uint) id);

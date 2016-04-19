@@ -1,6 +1,7 @@
 ﻿using Recodify.Logging.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -11,25 +12,41 @@ namespace Recodify.Logging.WebApi
         private readonly ITraceSource requestTraceSource;
         private readonly ITraceSource responseTraceSource;
         private readonly IContext context;
+        private readonly IOptions options;
 
         public LogHandler(
             ITraceSource requestTraceSource,
             ITraceSource responseTraceSource,
-            IContext context)
+            IContext context,
+            IOptions options)
         {
             this.requestTraceSource = requestTraceSource;
             this.responseTraceSource = responseTraceSource;
             this.context = context;
+            this.options = options;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
-        {
+        {            
+            if (options.ExcludeUrls.Any(x => request.RequestUri.AbsoluteUri.ToLower().Contains(x)))
+            {
+                return await base.SendAsync(request, cancellationToken); 
+            }
+
             var sw = new Stopwatch();
             sw.Start();
 
-            var content = await request.Content.ReadAsStringAsync();
+            var requestContent = await request.Content.ReadAsStringAsync();
 
-            requestTraceSource.TraceEvent(TraceEventType.Information, (int)EventId.RequestReceived, "{0} content {1}", request.ToString(), content);
+            requestTraceSource.TraceData(
+                TraceEventType.Information,
+                (int)EventId.RequestReceived,                
+                new KeyValuePair<string, object>("method", request.Method),
+                new KeyValuePair<string, object>("requestUrl", context.GetFullUrlWithMethod()),
+                new KeyValuePair<string, object>("headers", request.Headers.ToString()),
+                new KeyValuePair<string, object>("message", requestContent),
+                new KeyValuePair<string, object>("tags", new[] { "request", "http" }),
+                new KeyValuePair<string, object>("sessionId", context.GetSessionId()));            
 
             var response = await base.SendAsync(request, cancellationToken);
 
@@ -40,10 +57,8 @@ namespace Recodify.Logging.WebApi
                 return response;
 
             string responseContent;
-            if (request.RequestUri.AbsoluteUri.ToLower().Contains("content"))
-                responseContent = "IMAGE";
-            else
-                responseContent = await response.Content.ReadAsStringAsync();
+          
+            responseContent = await response.Content.ReadAsStringAsync();
 
             var statusCode = (int)response.StatusCode;
 
@@ -60,10 +75,16 @@ namespace Recodify.Logging.WebApi
         }
 
         private void TraceResponse(TraceEventType eventType, int statusCode, HttpResponseMessage response, long timing, string content)
-        {
-            var requestUrl = context.GetFullUrlWithMethod();
-            var message = string.Format("request url: {0} response: {1} content: {2}", requestUrl, response, content);
-            responseTraceSource.TraceData(eventType, statusCode, new KeyValuePair<string, object>("responseTime", timing), new KeyValuePair<string, object>("message", message));
+        {                        
+            responseTraceSource.TraceData(
+                eventType, 
+                statusCode, 
+                new KeyValuePair<string, object>("responseTime", timing),
+                new KeyValuePair<string, object>("requestUrl", context.GetFullUrlWithMethod()),
+                new KeyValuePair<string, object>("headers", response.Content.Headers.ToString() + " " + response.Headers.ToString()),
+                new KeyValuePair<string, object>("message", content),
+                new KeyValuePair<string, object>("tags", new[] { "response", "http" }),                
+                new KeyValuePair<string, object>("sessionId", context.GetSessionId()));
         }
     }
 }
