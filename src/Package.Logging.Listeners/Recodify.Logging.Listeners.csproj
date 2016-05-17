@@ -84,7 +84,7 @@
   <ItemGroup>
     <Compile Include="EventLogSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TraceListener.cs" />
+    <Compile Include="RabbitMq\TraceListener.cs" />
     <Compile Include="TraceLog.cs" />
   </ItemGroup>
   <ItemGroup>

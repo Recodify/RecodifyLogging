@@ -1,6 +1,7 @@
 ﻿using Recodify.Messaging.RabbitMq;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Web;
 
 namespace Recodify.Logging.Listeners.RabbitMq
-{
+{  
     public class TraceListener : System.Diagnostics.TraceListener
     {
         private const string requestIdKey = "RequestId";
@@ -103,6 +104,7 @@ namespace Recodify.Logging.Listeners.RabbitMq
             if (data != null)
             {
                 WriteData(data, traceLog);
+                traceLog.Message = data.ToString();
             }
 
             WriteFooter(eventCache, traceLog);
@@ -118,6 +120,7 @@ namespace Recodify.Logging.Listeners.RabbitMq
             var traceLog = new TraceLog();
 
             WriteHeader(source, eventType, id, eventCache, DateTime.Now, traceLog);
+            traceLog.Message = data.First().ToString();
             WriteFooter(eventCache, traceLog);
 
             var expando = AddDynamicProperties(data, traceLog);
@@ -138,7 +141,7 @@ namespace Recodify.Logging.Listeners.RabbitMq
                         expando.Add(kvp.Key, kvp.Value);
                     }
                     else
-                    {
+                    {                        
                         WriteData(data[i], traceLog);
                     }
                 }
@@ -199,8 +202,7 @@ namespace Recodify.Logging.Listeners.RabbitMq
 
         private void WriteData(object data, TraceLog log)
         {
-            log.Data.Add(data);
-            log.Message = data;
+            log.Data.Add(data.ToString());            
         }
 
         private void WriteHeaderDetail(String source, TraceEventType eventType, int id, TraceEventCache eventCache, TraceLog log)
@@ -217,11 +219,12 @@ namespace Recodify.Logging.Listeners.RabbitMq
             log.EventId = ((uint) id);
             log.Type = eventType.ToString();
             log.Severity = sev;
-            log.TimeCreated = DateTime.Now; ;
+            log.TimeCreated = DateTime.Now; 
             log.SourceName = source;
             log.CorrelationActivityId = eventCache != null ? System.Diagnostics.Trace.CorrelationManager.ActivityId.ToString() : Guid.Empty.ToString("B");
             log.MachineName = machineName;
             log.RequestId = GetRequestId();
+            log.Environment = GetEnvironment();
 
             WriteFooter(eventCache, log);
         }
@@ -253,6 +256,17 @@ namespace Recodify.Logging.Listeners.RabbitMq
                 return string.Empty;
 
             return HttpContext.Current.Request.Url.LocalPath;
+        }
+
+        private string GetEnvironment()
+        {
+            var environment = ConfigurationManager.AppSettings["RecodifyLogging:Environment"];
+            if (string.IsNullOrWhiteSpace(environment))
+            {
+                return "";
+            }
+
+            return environment;
         }
 
         private void WriteFooter(TraceEventCache eventCache, TraceLog log)

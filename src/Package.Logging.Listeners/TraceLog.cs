@@ -9,9 +9,10 @@ namespace Recodify.Logging.Listeners.RabbitMq
         public TraceLog()
         {
             LogicalOperations = new List<string>();
-            Data = new List<object>();
+            Data = new List<string>();
         }
 
+        public string Environment { get; set; }
         public string RelatedActivityId { get; set; }
         public int Level { get; set; }
         public uint EventId { get; set; }
@@ -24,8 +25,8 @@ namespace Recodify.Logging.Listeners.RabbitMq
         public List<string> LogicalOperations { get; set; }
         public string LogicalOperation { get; set; }
         public string CallStack { get; set; }
-        public List<object> Data { get; set; }
-        public object Message { get; set; }
+        public List<string> Data { get; set; }
+        public string Message { get; set; }
         public string MachineName { get; set; }
         public string Host { get; set; }
         public string Component { get; set; }
