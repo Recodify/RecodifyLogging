@@ -32,7 +32,9 @@ namespace Recodify.Logging.Listeners.RabbitMq
         public string Component { get; set; }
         public Guid RequestId { get; set; }
         public string UrlLocalPath { get; set; }
-       
+        public string TimeCreatedFormatted { get; set; }
+        public DateTime LocalTimeCreated { get; set; }
+        public string LocalTimeCreatedFormatted { get; set; }
 
         public ExpandoObject ToExpando()
         {
@@ -41,6 +43,9 @@ namespace Recodify.Logging.Listeners.RabbitMq
             expando.Level = Level;
             expando.EventId = EventId;
             expando.TimeCreated = TimeCreated;
+            expando.TimeCreatedFormatted = TimeCreatedFormatted;
+            expando.LocalTimeCreated = LocalTimeCreated;
+            expando.LocalTimeCreatedFormatted = LocalTimeCreatedFormatted;
             expando.EventCacheTimestamp = EventCacheTimestamp;
             expando.Severity = Severity;
             expando.Type = Type;
@@ -56,6 +61,7 @@ namespace Recodify.Logging.Listeners.RabbitMq
             expando.Component = Component;
             expando.RequestId = RequestId;
             expando.UrlLocalPath = UrlLocalPath;
+            expando.Environment = Environment;
 
             return expando;
         }

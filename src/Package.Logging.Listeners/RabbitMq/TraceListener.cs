@@ -128,6 +128,17 @@ namespace Recodify.Logging.Listeners.RabbitMq
             Publish(expando);
         }
 
+        public override void TraceTransfer(TraceEventCache eventCache, String source, int id, string message, Guid relatedActivityId)
+        {
+            var traceLog = new TraceLog();
+
+            WriteHeader(source, TraceEventType.Transfer, id, eventCache, relatedActivityId, DateTime.Now, traceLog);
+            WriteData(message, traceLog);
+            WriteFooter(eventCache, traceLog);
+
+            Publish(traceLog);
+        }
+
         private IDictionary<string, object> AddDynamicProperties(object[] data, TraceLog traceLog)
         {
             var expando = traceLog.ToExpando() as IDictionary<string, object>;
@@ -147,18 +158,7 @@ namespace Recodify.Logging.Listeners.RabbitMq
                 }
             }
             return expando;
-        }
-
-        public override void TraceTransfer(TraceEventCache eventCache, String source, int id, string message, Guid relatedActivityId)
-        {
-            var traceLog = new TraceLog();
-            
-            WriteHeader(source, TraceEventType.Transfer, id, eventCache, relatedActivityId, DateTime.Now, traceLog);
-            WriteData(message, traceLog);
-            WriteFooter(eventCache, traceLog);
-
-            Publish(traceLog);
-        }
+        }      
 
         internal bool IsEnabled(TraceOptions opts)
         {
@@ -219,7 +219,10 @@ namespace Recodify.Logging.Listeners.RabbitMq
             log.EventId = ((uint) id);
             log.Type = eventType.ToString();
             log.Severity = sev;
-            log.TimeCreated = DateTime.Now; 
+            log.TimeCreated = DateTime.UtcNow;
+            log.TimeCreatedFormatted = DateTime.UtcNow.ToString("o");
+            log.LocalTimeCreated = DateTime.Now;
+            log.LocalTimeCreatedFormatted = DateTime.Now.ToString("o");
             log.SourceName = source;
             log.CorrelationActivityId = eventCache != null ? System.Diagnostics.Trace.CorrelationManager.ActivityId.ToString() : Guid.Empty.ToString("B");
             log.MachineName = machineName;
