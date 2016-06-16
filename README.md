@@ -10,28 +10,62 @@ Getting Started
 To begin using:
 
 1. Use NuGet to `Install-Package Recodify.Logging.Listeners -Pre`
-2. Add the following keys to web.config appSettings.
-
-  This is a tag used to differentiate logs by environment 
-    <add key="RecodifyLogging:Environment" value="Local" />
-
-  This is the connection string to your rabbitMQ instance  
+2. Add the following keys to web.config appSettings.  
+    <!--  This is a tag used to differentiate logs by environment -->
+    <add key="RecodifyLogging:Environment" value="Local" />  
+    <!--    This is the connection string to your rabbitMQ instance -->
     <add key="RabbitMqConnectionString" value="host=cascadelogs.cloudapp.net;virtualHost=/;username=publisher;password=snowwhite"/>
 3. Add the below configuration to `Web.config`
  
 
-
 	<system.diagnostics>
 		<trace autoflush="true" />
 		<sources>
+      <source name="Fallback"  switchValue="Information, Error, Warning">
+      <listeners>
+        <!-- This is optional and will log any errors publishing to RabbitMQ and can be useful for diagnosing initial setup -->
+        <add name="FallBackTraceListners" 
+          type="System.Diagnostics.TextWriterTraceListener" 
+          initializeData="TextWriterOutput.log" />         
+        </add>
+      </listeners>
 		  <source name="SomeTraceSourceName" switchValue="Information, Error, Warning">
 			<listeners>
-			  <add name="SomeTraceListenerName" type="Recodify.Logging.Listeners.RabbitMq.TraceListener, Recodify.Logging.Listeners.RabbitMq" initializeData="eventlog,eventlog" />
+			  <add name="SomeTraceListenerName" type="Recodify.Logging.Listeners.RabbitMq.TraceListener, Recodify.Logging.Listeners.RabbitMq" initializeData="exchangeName,queueName,componentName " />
 			</listeners>
 		  </source>
 		  </source>
 		</sources>
 	</system.diagnostics>
+  
+4. You are now ready to start creating some logs.
+
+a. If you are using an IOC container, registered the jobLogger with your traceSourceName:
+
+    container.RegisterInstance(typeof(IJobLogger), new JobLogger("BillingDetails"));
+    
+Then simply inject IJobLogger as a dependency e.g:
+
+    public MyClass (IJobLogger jobLogger)
+    {
+       jobLogger.TraceData(TraceEventType.Information, (int)Event.MyEvent, "Your Message");
+    }
+
+b. If you are not using an IOC container, just new up a logger:
+
+     var jobLogger = new JobLogger("BillingDetails");
+     jobLogger.TraceData(TraceEventType.Information, (int)Event.MyEvent, "Your Message");
+     
+
+5. If you are operating in a web environment. You can stamp all logs with the request Id by adding the following to your `Global.asax
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            if (HttpContext.Current != null)
+            {
+                HttpContext.Current.Items.Add("RequestId", Guid.NewGuid());               
+            }
+        }
 
 
 Dependencies
