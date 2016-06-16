@@ -26,8 +26,7 @@ To begin using:
         <add name="FallBackTraceListners" 
           type="System.Diagnostics.TextWriterTraceListener" 
           initializeData="TextWriterOutput.log" />    
-        </add>
-      </listeners>
+        </add>             
 		  <source name="SomeTraceSourceName" switchValue="Information, Error, Warning">
 			<listeners>
 			  <add name="SomeTraceListenerName" type="Recodify.Logging.Listeners.RabbitMq.TraceListener, Recodify.Logging.Listeners.RabbitMq" initializeData="exchangeName,queueName,componentName " />
