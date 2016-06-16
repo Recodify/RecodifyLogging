@@ -38,10 +38,6 @@
     <Reference Include="Castle.Windsor">
       <HintPath>..\..\packages\Castle.Windsor.3.2.1\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
-    <Reference Include="Collinson.Extensions, Version=1.0.0.68, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Collinson.Extensions.1.0.0.68\lib\4.0\Debug\Collinson.Extensions.dll</HintPath>
-    </Reference>
     <Reference Include="EasyNetQ, Version=0.34.0.279, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EasyNetQ.0.34.0.279\lib\net40\EasyNetQ.dll</HintPath>
       <Private>True</Private>

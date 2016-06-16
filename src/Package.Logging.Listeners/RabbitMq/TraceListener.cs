@@ -112,7 +112,7 @@ namespace Recodify.Logging.Listeners.RabbitMq
             Publish(traceLog);
         }
 
-        public override void TraceData(TraceEventCache eventCache, String source, TraceEventType eventType, int id, params object[] data)
+        public override void TraceData(TraceEventCache eventCache, string source, TraceEventType eventType, int id, params object[] data)
         {
             if (Filter != null && !Filter.ShouldTrace(eventCache, source, eventType, id, null, null, null, data))
                 return;
@@ -168,7 +168,7 @@ namespace Recodify.Logging.Listeners.RabbitMq
         private void Publish(IDictionary<string, object> log)
         {
             try
-            {
+            {				
                 publisher.Publish(log);
             }
             catch(Exception exp)
@@ -180,8 +180,8 @@ namespace Recodify.Logging.Listeners.RabbitMq
         private void Publish(TraceLog log)
         {
             try
-            {
-                publisher.Publish(log);
+            {				
+				publisher.Publish(log);
             }
             catch (Exception exp)
             {

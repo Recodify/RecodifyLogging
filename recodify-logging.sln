@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recodify.Logging.Listeners"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recodify.Messaging.RabbitMq", "src\Package.Messaging.RabbitMq\Recodify.Messaging.RabbitMq.csproj", "{893C2072-9F72-46BD-9133-A9F93A2B6647}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "src\UnitTests\UnitTests.csproj", "{5382EF62-AF4F-483A-9274-51D97321C16B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{893C2072-9F72-46BD-9133-A9F93A2B6647}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{893C2072-9F72-46BD-9133-A9F93A2B6647}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{893C2072-9F72-46BD-9133-A9F93A2B6647}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5382EF62-AF4F-483A-9274-51D97321C16B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5382EF62-AF4F-483A-9274-51D97321C16B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5382EF62-AF4F-483A-9274-51D97321C16B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5382EF62-AF4F-483A-9274-51D97321C16B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
