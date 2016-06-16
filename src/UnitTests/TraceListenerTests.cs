@@ -1,14 +1,10 @@
 ﻿using NUnit.Framework;
 using Recodify.Logging.Listeners.RabbitMq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTests
 {
-    public class TraceListenerTests
+	public class TraceListenerTests
     {
 		[Test]
 		public void Should_LogExceptions_WhenTheyContainAnInnerException()
