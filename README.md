@@ -17,7 +17,7 @@ To begin using:
     <add key="RabbitMqConnectionString" value="host=cascadelogs.cloudapp.net;virtualHost=/;username=publisher;password=snowwhite"/>
 3. Add the below configuration to `Web.config`
 
-	<system.diagnostics>
+	`<system.diagnostics>
 		<trace autoflush="true" />
 		<sources>
       <source name="Fallback"  switchValue="Information, Error, Warning">
@@ -35,7 +35,7 @@ To begin using:
 		  </source>
 		  </source>
 		</sources>
-	</system.diagnostics> 
+	</system.diagnostics>`
     
 4. You are now ready to start creating some logs.
 
