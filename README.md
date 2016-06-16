@@ -9,7 +9,7 @@ Getting Started
 
 To begin using:
 
-1. Use NuGet to `Install-Package Recodify.Logging.Listeners -Pre`
+1. Use NuGet to `Install-Package Recodify.Logging.Listeners`
 2. Add the following keys to web.config appSettings.  
     <!--  This is a tag used to differentiate logs by environment -->
     <add key="RecodifyLogging:Environment" value="Local" />  
@@ -37,6 +37,7 @@ To begin using:
 		  </source>
 		</sources>
 	</system.diagnostics>
+  
   
 4. You are now ready to start creating some logs.
 
@@ -71,13 +72,13 @@ b. If you are not using an IOC container, just new up a logger:
 Dependencies
 ------------
 
-  Castle.Core version="3.2.2"
-  Castle.Windsor" version="3.2.1"  
-  EasyNetQ" version="0.34.0.279"
-  EasyNetQ.Management.Client" version="0.39.2.333"
-  Iesi.Collections" version="3.2.0.4000"  
-  Newtonsoft.Json" version="7.0.1"  
-  RabbitMQ.Client" version="3.3.2"
+- Castle.Core version="3.2.2"
+- Castle.Windsor" version="3.2.1"  
+- EasyNetQ" version="0.34.0.279"
+- EasyNetQ.Management.Client" version="0.39.2.333"
+- Iesi.Collections" version="3.2.0.4000"  
+- Newtonsoft.Json" version="7.0.1"  
+- RabbitMQ.Client" version="3.3.2"
 
 
 Recodify.Logging.Trace
@@ -91,7 +92,7 @@ Getting Started
 
 To begin using:
 
-1. Use NuGet to `Install-Package Recodify.Logging.Trace -Pre`
+1. Use NuGet to `Install-Package Recodify.Logging.Trace`
 2. Wherever an existing `TraceSource` is required you can use `ITraceSource` and inject the concrete implementation `SanitisedTraceSource` or general `TraceSource`
 
 Dependencies
