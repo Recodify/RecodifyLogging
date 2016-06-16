@@ -20,7 +20,6 @@ To begin using:
 	`<system.diagnostics>
 		<trace autoflush="true" />
 		<sources>    
-      <listeners>
         <!-- This is optional and will log any errors publishing to RabbitMQ and can be useful for diagnosing initial setup -->
         <add name="FallBackTraceListners" 
           type="System.Diagnostics.TextWriterTraceListener" 
