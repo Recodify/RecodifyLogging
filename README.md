@@ -20,7 +20,7 @@ To begin using:
 	`<system.diagnostics>
 		<trace autoflush="true" />
 		<sources>
-      <source name="Fallback"  switchValue="Information, Error, Warning">
+    <source name="Fallback"  switchValue="Information, Error, Warning">
       <listeners>
         <!-- This is optional and will log any errors publishing to RabbitMQ and can be useful for diagnosing initial setup -->
         <add name="FallBackTraceListners" 
