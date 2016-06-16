@@ -34,7 +34,8 @@ To begin using:
                 <add name="YourListenerName" type="Recodify.Logging.Listeners.RabbitMq.TraceListener, Recodify.Logging.Listeners.RabbitMq" initializeData="exchangeName,queueName,componentName " />
                 </listeners>
             </source>		  
-		</sources></system.diagnostics>
+		</sources>
+        </system.diagnostics>
 	
     
 4. You are now ready to start creating some logs.
