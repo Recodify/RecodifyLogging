@@ -18,23 +18,23 @@ To begin using:
 3. Add the below configuration to `Web.config`
 
 	    <system.diagnostics>
-		<trace autoflush="true" />
-		<sources>
-            <source name="Fallback" switchValue="Information, Error, Warning">
-                <listeners>    
-                    <!-- This is optional and will log any errors publishing to RabbitMQ and can be useful for diagnosing initial setup -->
-                    <add name="FallBackTraceListners" 
-                    type="System.Diagnostics.TextWriterTraceListener" 
-                    initializeData="TextWriterOutput.log" />    
-                    </add>
-                </listenrs>
-            <source>           
-            <source name="YourSourceName" switchValue="Information, Error, Warning">
-                <listeners>
-                <add name="YourListenerName" type="Recodify.Logging.Listeners.RabbitMq.TraceListener, Recodify.Logging.Listeners.RabbitMq" initializeData="exchangeName,queueName,componentName " />
-                </listeners>
-            </source>		  
-		</sources>
+            <trace autoflush="true" />
+            <sources>
+                <source name="Fallback" switchValue="Information, Error, Warning">
+                    <listeners>    
+                        <!-- This is optional and will log any errors publishing to RabbitMQ and can be useful for diagnosing initial setup -->
+                        <add name="FallBackTraceListners" 
+                        type="System.Diagnostics.TextWriterTraceListener" 
+                        initializeData="TextWriterOutput.log" />    
+                        </add>
+                    </listenrs>
+                <source>           
+                <source name="YourSourceName" switchValue="Information, Error, Warning">
+                    <listeners>
+                    <add name="YourListenerName" type="Recodify.Logging.Listeners.RabbitMq.TraceListener, Recodify.Logging.Listeners.RabbitMq" initializeData="exchangeName,queueName,componentName " />
+                    </listeners>
+                </source>		  
+            </sources>
         </system.diagnostics>
 	
     
