@@ -1,4 +1,68 @@
-Recodify Logging
+Recodify Logging Listeners
+===========================
+
+This library is a set of custom implementations for the existing 'System.Diagnostics.TraceListener'.
+Currently included is a RabbitMq listener which sends traces to a message queue for consumption.
+
+Getting Started
+---------------
+
+To begin using:
+
+1. Use NuGet to `Install-Package Recodify.Logging.Listeners -Pre`
+2. 
+   `<add key="RecodifyLogging:Environment" value="Local" /> 
+   `<add key="RabbitMqConnectionString" value="host=cascadelogs.cloudapp.net;virtualHost=/;username=publisher;password=snowwhite"/>
+3. Add the below configuration to `Web.config`
+ 
+
+
+	<system.diagnostics>
+		<trace autoflush="true" />
+		<sources>
+		  <source name="SomeTraceSourceName" switchValue="Information, Error, Warning">
+			<listeners>
+			  <add name="SomeTraceListenerName" type="Recodify.Logging.Listeners.RabbitMq.TraceListener, Recodify.Logging.Listeners.RabbitMq" initializeData="eventlog,eventlog" />
+			</listeners>
+		  </source>
+		  </source>
+		</sources>
+	</system.diagnostics>
+
+
+Dependencies
+------------
+
+  Castle.Core version="3.2.2"
+  Castle.Windsor" version="3.2.1"  
+  EasyNetQ" version="0.34.0.279"
+  EasyNetQ.Management.Client" version="0.39.2.333"
+  Iesi.Collections" version="3.2.0.4000"  
+  Newtonsoft.Json" version="7.0.1"  
+  RabbitMQ.Client" version="3.3.2"
+
+
+Recodify.Logging.Trace
+=========================
+
+This library wraps an existing `System.Diagnostics.TraceSource` with additional sanitisation functionality.
+This alleviates the risk of logging sensitive data such as passwords and ending up in unsafe hands.
+
+Getting Started
+---------------
+
+To begin using:
+
+1. Use NuGet to `Install-Package Recodify.Logging.Trace -Pre`
+2. Wherever an existing `TraceSource` is required you can use `ITraceSource` and inject the concrete implementation `SanitisedTraceSource` or general `TraceSource`
+
+Dependencies
+------------
+
+None
+
+
+Recodify.Logging.WebApi
 =========================
 
 This library can be used to add logging to existing Web API 2.2 projects. 
@@ -12,7 +76,7 @@ Getting Started
 
 To begin using:
 
-1. `Install-Package Recodify.Logging.WebApi -Pre`
+1. `Install-Package Recodify.Logging.WebApi`
 2. Within your `WebApiConfig.cs` do the following (You can also use the general `TraceSouce` if data sanitisation is not required)
 3. See below:
 
@@ -28,4 +92,8 @@ To begin using:
         }
     }
 
+Dependencies
+------------
 
+- Newtonsoft.Json version="7.0.1"
+- Recodify.Logging.Trace
