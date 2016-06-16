@@ -35,6 +35,7 @@ To begin using:
 		  </source>
 		</sources>
 	</system.diagnostics> 
+    
 4. You are now ready to start creating some logs.
 
 a. If you are using an IOC container, registered the jobLogger with your traceSourceName:
@@ -53,7 +54,6 @@ b. If you are not using an IOC container, just new up a logger:
      var jobLogger = new JobLogger("BillingDetails");
      jobLogger.TraceData(TraceEventType.Information, (int)Event.MyEvent, "Your Message");
      
-
 5. If you are operating in a web environment. You can stamp all logs with the request Id by adding the following to your `Global.asax
 
         protected void Application_BeginRequest(object sender, EventArgs e)
