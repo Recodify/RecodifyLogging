@@ -16,8 +16,6 @@ To begin using:
     <!--    This is the connection string to your rabbitMQ instance -->
     <add key="RabbitMqConnectionString" value="host=cascadelogs.cloudapp.net;virtualHost=/;username=publisher;password=snowwhite"/>
 3. Add the below configuration to `Web.config`
- 
-
 	<system.diagnostics>
 		<trace autoflush="true" />
 		<sources>
@@ -36,9 +34,7 @@ To begin using:
 		  </source>
 		  </source>
 		</sources>
-	</system.diagnostics>
-  
-  
+	</system.diagnostics> 
 4. You are now ready to start creating some logs.
 
 a. If you are using an IOC container, registered the jobLogger with your traceSourceName:
