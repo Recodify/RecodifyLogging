@@ -10,9 +10,11 @@ Getting Started
 To begin using:
 
 1. Use NuGet to `Install-Package Recodify.Logging.Listeners -Pre`
-2. 
-   `<add key="RecodifyLogging:Environment" value="Local" /> 
-   <add key="RabbitMqConnectionString" value="host=cascadelogs.cloudapp.net;virtualHost=/;username=publisher;password=snowwhite"/>`
+2. Add the following keys to web.config appSettings.
+  This is a tag used to differentiate logs by environment 
+    <add key="RecodifyLogging:Environment" value="Local" />
+  This is the connection string to your rabbitMQ instance  
+    <add key="RabbitMqConnectionString" value="host=cascadelogs.cloudapp.net;virtualHost=/;username=publisher;password=snowwhite"/>
 3. Add the below configuration to `Web.config`
  
 
