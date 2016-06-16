@@ -48,7 +48,7 @@ To begin using:
 
         public MyClass (IJobLogger jobLogger)
         {
-        jobLogger.TraceData(TraceEventType.Information, (int)Event.MyEvent, "Your Message");
+            jobLogger.TraceData(TraceEventType.Information, (int)Event.MyEvent, "Your Message");
         }
 
    If you are not using an IOC container, just new up a logger:
@@ -58,13 +58,13 @@ To begin using:
      
 5. If you are operating in a web environment. You can stamp all logs with the request Id by adding the following to your `Global.asax
 
-            protected void Application_BeginRequest(object sender, EventArgs e)
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            if (HttpContext.Current != null)
             {
-                if (HttpContext.Current != null)
-                {
-                    HttpContext.Current.Items.Add("RequestId", Guid.NewGuid());               
-                }
+                HttpContext.Current.Items.Add("RequestId", Guid.NewGuid());               
             }
+        }
 
 
 Dependencies
