@@ -38,18 +38,18 @@ To begin using:
     
 4. You are now ready to start creating some logs.
 
-a. If you are using an IOC container, registered the jobLogger with your traceSourceName:
+   If you are using an IOC container, registered the jobLogger with your traceSourceName:
 
     container.RegisterInstance(typeof(IJobLogger), new JobLogger("BillingDetails"));
     
-Then simply inject IJobLogger as a dependency e.g:
+   Then simply inject IJobLogger as a dependency e.g:
 
     public MyClass (IJobLogger jobLogger)
     {
        jobLogger.TraceData(TraceEventType.Information, (int)Event.MyEvent, "Your Message");
     }
 
-b. If you are not using an IOC container, just new up a logger:
+   If you are not using an IOC container, just new up a logger:
 
      var jobLogger = new JobLogger("BillingDetails");
      jobLogger.TraceData(TraceEventType.Information, (int)Event.MyEvent, "Your Message");
