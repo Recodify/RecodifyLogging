@@ -17,22 +17,25 @@ To begin using:
     <add key="RabbitMqConnectionString" value="host=cascadelogs.cloudapp.net;virtualHost=/;username=publisher;password=snowwhite"/>
 3. Add the below configuration to `Web.config`
 
-	`<system.diagnostics>
+	<system.diagnostics>
 		<trace autoflush="true" />
-		<sources>    
-        <!-- This is optional and will log any errors publishing to RabbitMQ and can be useful for diagnosing initial setup -->
-        <add name="FallBackTraceListners" 
-          type="System.Diagnostics.TextWriterTraceListener" 
-          initializeData="TextWriterOutput.log" />    
-        </add>             
-		  <source name="SomeTraceSourceName" switchValue="Information, Error, Warning">
-			<listeners>
-			  <add name="SomeTraceListenerName" type="Recodify.Logging.Listeners.RabbitMq.TraceListener, Recodify.Logging.Listeners.RabbitMq" initializeData="exchangeName,queueName,componentName " />
-			</listeners>
-		  </source>
-		  </source>
+		<sources>
+            <source name="Fallback" switchValue="Information, Error, Warning">
+                <listeners>    
+                    <!-- This is optional and will log any errors publishing to RabbitMQ and can be useful for diagnosing initial setup -->
+                    <add name="FallBackTraceListners" 
+                    type="System.Diagnostics.TextWriterTraceListener" 
+                    initializeData="TextWriterOutput.log" />    
+                    </add>
+                </listenrs>
+            <source>           
+            <source name="YourSourceName" switchValue="Information, Error, Warning">
+                <listeners>
+                <add name="YourListenerName" type="Recodify.Logging.Listeners.RabbitMq.TraceListener, Recodify.Logging.Listeners.RabbitMq" initializeData="exchangeName,queueName,componentName " />
+                </listeners>
+            </source>		  
 		</sources>
-	</system.diagnostics>`
+	</system.diagnostics>
     
 4. You are now ready to start creating some logs.
 
