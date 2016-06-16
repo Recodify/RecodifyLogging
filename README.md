@@ -1,3 +1,9 @@
+Recodify Logging
+=================
+
+Consists of three assemblies / untilities that may one day be split into seperate packages.
+
+
 Recodify Logging Listeners
 ===========================
 
