@@ -35,7 +35,7 @@ To begin using:
                 </listeners>
             </source>		  
 		</sources>
-     <system.diagnostics>
+     </system.diagnostics>
 	
     
 4. You are now ready to start creating some logs.
