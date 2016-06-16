@@ -16,6 +16,7 @@ To begin using:
     <!--    This is the connection string to your rabbitMQ instance -->
     <add key="RabbitMqConnectionString" value="host=cascadelogs.cloudapp.net;virtualHost=/;username=publisher;password=snowwhite"/>
 3. Add the below configuration to `Web.config`
+
 	<system.diagnostics>
 		<trace autoflush="true" />
 		<sources>
