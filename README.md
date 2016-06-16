@@ -12,7 +12,7 @@ To begin using:
 1. Use NuGet to `Install-Package Recodify.Logging.Listeners -Pre`
 2. 
    `<add key="RecodifyLogging:Environment" value="Local" /> 
-   `<add key="RabbitMqConnectionString" value="host=cascadelogs.cloudapp.net;virtualHost=/;username=publisher;password=snowwhite"/>
+   <add key="RabbitMqConnectionString" value="host=cascadelogs.cloudapp.net;virtualHost=/;username=publisher;password=snowwhite"/>`
 3. Add the below configuration to `Web.config`
  
 
