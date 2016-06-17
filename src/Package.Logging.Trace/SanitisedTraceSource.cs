@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Recodify.Logging.Trace.Sanitisation;
 using System.Collections.Generic;
+using Recodify.Logging.Web;
 
 namespace Recodify.Logging.Trace
 {   
@@ -65,7 +66,49 @@ namespace Recodify.Logging.Trace
             traceSource.TraceTransfer(id, Sanitise(message), relatedActivityId);
         }
 
-        private string Sanitise(string input)
+		public void TraceRequest(string requestMethod, string headers, string content, string url, string sessionId = null)
+		{
+			TraceData(
+			   TraceEventType.Information,
+			   (int)EventId.RequestReceived,
+			   new KeyValuePair<string, object>("method", requestMethod),
+			   new KeyValuePair<string, object>("requestUrl", url),
+			   new KeyValuePair<string, object>("headers", headers),
+			   new KeyValuePair<string, object>("message", content),
+			   new KeyValuePair<string, object>("tags", new[] { "request", "http" }),
+			   new KeyValuePair<string, object>("sessionId", sessionId));
+		}
+
+		public void TraceResponse(int statusCode, string headers, string content, long timing, string url, string sessionId = null)
+		{
+			if (statusCode < 399)
+			{
+				RaiseTraceResponse(TraceEventType.Information, statusCode, headers, content, timing, url, sessionId);
+			}
+			else if (statusCode >= 400 && statusCode <= 499)
+			{
+				RaiseTraceResponse(TraceEventType.Warning, statusCode, headers, content, timing, url, sessionId);
+			}
+			else if (statusCode > 499)
+			{
+				RaiseTraceResponse(TraceEventType.Error, statusCode, headers, content, timing, url, sessionId);
+			}
+		}
+
+		private void RaiseTraceResponse(TraceEventType eventType, int statusCode, string headers, string content, long timing, string url, string sessionId)
+		{
+			TraceData(
+				eventType,
+				statusCode,
+				new KeyValuePair<string, object>("responseTime", timing),
+				new KeyValuePair<string, object>("requestUrl", url),
+				new KeyValuePair<string, object>("headers", headers),
+				new KeyValuePair<string, object>("message", content),
+				new KeyValuePair<string, object>("tags", new[] { "response", "http" }),
+				new KeyValuePair<string, object>("sessionId", sessionId ?? string.Empty));
+		}
+
+		private string Sanitise(string input)
         {
             return sanitiser.Sanitise(input);
         }
