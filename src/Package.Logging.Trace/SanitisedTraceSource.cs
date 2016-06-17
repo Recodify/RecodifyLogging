@@ -66,7 +66,7 @@ namespace Recodify.Logging.Trace
             traceSource.TraceTransfer(id, Sanitise(message), relatedActivityId);
         }
 
-		public void TraceRequest(string requestMethod, string headers, string content, string url, string sessionId = null)
+		public void TraceRequest(string requestMethod, string headers, string content, string url, string ipAddress, string sessionId = null)
 		{
 			TraceData(
 			   TraceEventType.Information,
@@ -76,7 +76,8 @@ namespace Recodify.Logging.Trace
 			   new KeyValuePair<string, object>("headers", headers),
 			   new KeyValuePair<string, object>("message", content),
 			   new KeyValuePair<string, object>("tags", new[] { "request", "http" }),
-			   new KeyValuePair<string, object>("sessionId", sessionId));
+			   new KeyValuePair<string, object>("sessionId", sessionId),
+			   new KeyValuePair<string, object>("clientip", ipAddress));
 		}
 
 		public void TraceResponse(int statusCode, string headers, string content, long timing, string url, string sessionId = null)

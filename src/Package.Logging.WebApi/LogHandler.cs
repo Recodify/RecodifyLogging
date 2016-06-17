@@ -52,7 +52,7 @@ namespace Recodify.Logging.WebApi
 
 			var requestContent = await request.Content.ReadAsStringAsync();
 
-			requestTraceSource.TraceRequest(request.Method.ToString(), request.Headers.ToString(), requestContent, context.GetFullUrlWithMethod(), context.GetSessionId());
+			requestTraceSource.TraceRequest(request.Method.ToString(), request.Headers.ToString(), requestContent, context.GetFullUrlWithMethod(), context.GetClientIp(), context.GetSessionId());
 
 			// Response
 			var response = await base.SendAsync(request, cancellationToken);
