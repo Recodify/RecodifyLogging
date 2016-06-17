@@ -10,6 +10,12 @@
     <copyright>Copyright 2016</copyright>
   </metadata>
     <files>
-<file src="Infrastructure\bin\Release\Inty.Messaging.Infrastructure.dll" target="lib\net40" />
+<file src="src\Package.Logging.Listeners\bin\Release\Recodify.Logging.Listeners.dll" target="lib\net40" />
+<file src="src\Recodify.Logging.Mvc\bin\Release\Recodify.Logging.Mvc.dll" target="lib\net40" />
+<file src="src\Package.Logging.Trace\bin\Release\Recodify.Logging.Trace.dll" target="lib\net40" />
+
+<file src="src\Recodify.Logging.Web\bin\Release\Recodify.Logging.Web.dll" target="lib\net40" />
+<file src="src\Package.Logging.WebApi\bin\Release\Recodify.Logging.WebApi.dll" target="lib\net40" />
+<file src="src\Package.Messaging.RabbitMq\bin\Release\Collinson.Messaging.RabbitMq.dll" target="lib\net40" />
 </files>
 </package>
