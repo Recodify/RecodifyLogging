@@ -5,5 +5,6 @@
         string GetContextString();
         string GetFullUrlWithMethod();
         string GetSessionId();
-    }
+		string GetClientIp();
+	}
 }

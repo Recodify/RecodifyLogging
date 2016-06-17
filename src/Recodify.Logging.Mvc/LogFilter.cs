@@ -44,7 +44,7 @@ namespace Recodify.Logging.Mvc
 				SetupTimer(filterContext);
 
 				var requestContent = currentRequest.ToRaw();
-				requestTraceSource.TraceRequest(currentRequest.HttpMethod, currentRequest.Headers.ToString(), requestContent, context.GetFullUrlWithMethod(), context.GetSessionId());
+				requestTraceSource.TraceRequest(currentRequest.HttpMethod, currentRequest.Headers.ToString(), requestContent, context.GetFullUrlWithMethod(), context.GetClientIp(), context.GetSessionId());
 			}
 			catch (Exception exp)
 			{
