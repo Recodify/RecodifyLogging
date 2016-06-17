@@ -6,7 +6,7 @@
     <authors>Inty Development</authors>
     <owners>Inty</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Desc</description>
+    <description>Intys logging infrastructure libraries. Includes: listeners; Web Api & MVC plug ins; and RabbitMQ utilities.</description>
 <iconUrl>http://www.intycascade.com/favicon-16x16.png</iconUrl>
     <copyright>Copyright 2016</copyright>
   </metadata>
