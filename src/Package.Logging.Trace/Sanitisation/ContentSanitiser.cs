@@ -22,7 +22,7 @@ namespace Recodify.Logging.Trace.Sanitisation
         public string Sanitise(string source)
         {
             try
-            {
+            {				
 	            if (string.IsNullOrWhiteSpace(source))
 	            {
 		            return source;

@@ -84,7 +84,12 @@ namespace Recodify.Logging.Trace
 				{
 					var s = ((KeyValuePair<string, object>)o).Value.ToString();
 					return sanitiser.Sanitise(s);
-				}
+				}			
+			}
+			else if (o.GetType() == typeof(IDictionary<string, IEnumerable<string>>))
+			{
+				var s = ((IDictionary<string, IEnumerable<string>>)o).ToDictionary(k => k.Key, v => v.Value.Select(y => sanitiser.Sanitise(y)));
+				return s;
 			}
 
 			return o;

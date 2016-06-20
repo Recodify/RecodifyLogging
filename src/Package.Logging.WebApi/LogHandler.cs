@@ -6,6 +6,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Recodify.Logging.WebApi
 {
@@ -54,7 +56,8 @@ namespace Recodify.Logging.WebApi
 
 			try
 			{
-				requestTraceSource.TraceRequest(request.Method.ToString(), request.Headers.ToString(), requestContent, context.GetFullUrlWithMethod(), context.GetClientIp(), context.GetSessionId());
+				var requestHeaders = request.Headers.ToDictionary(k => k.Key, v => v.Value);
+				requestTraceSource.TraceRequest(request.Method.ToString(), GetRequestHeaders(request), requestContent, context.GetFullUrlWithMethod(), context.GetClientIp(), context.GetSessionId());
 			}
 			catch (Exception exp)
 			{
@@ -83,6 +86,13 @@ namespace Recodify.Logging.WebApi
 			}
 
 			return response;
+		}
+
+		private static string GetRequestHeaders(HttpRequestMessage request)
+		{
+			var headers = request.Headers.ToDictionary(k => k.Key, v => v.Value.Aggregate((c, n) => c + "," + n));
+			var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = ReferenceLoopHandling.Serialize };
+			return JsonConvert.SerializeObject(headers, Formatting.Indented, jsonSettings);
 		}
 	}
 }

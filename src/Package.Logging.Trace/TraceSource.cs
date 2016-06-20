@@ -66,8 +66,8 @@ namespace Recodify.Logging.Trace
 				TraceData(
 				   TraceEventType.Information,
 				   (int)EventId.RequestReceived,
-				   new KeyValuePair<string, object>("httpMethod", requestMethod),
 				   new KeyValuePair<string, object>("requestUrl", url),
+				   new KeyValuePair<string, object>("httpMethod", requestMethod),				   
 				   new KeyValuePair<string, object>("headers", headers),
 				   new KeyValuePair<string, object>("message", content),
 				   new KeyValuePair<string, object>("tags", new[] { "request", "http" }),
@@ -108,8 +108,8 @@ namespace Recodify.Logging.Trace
 			TraceData(
 				eventType,
 				statusCode,
-				new KeyValuePair<string, object>("responseTime", timing),
 				new KeyValuePair<string, object>("requestUrl", url),
+				new KeyValuePair<string, object>("responseTime", timing),				
 				new KeyValuePair<string, object>("headers", headers),
 				new KeyValuePair<string, object>("message", content),
 				new KeyValuePair<string, object>("tags", new[] { "response", "http" }),

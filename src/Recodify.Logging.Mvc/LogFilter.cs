@@ -44,7 +44,7 @@ namespace Recodify.Logging.Mvc
 				SetupTimer(filterContext);
 
 				var requestContent = currentRequest.ToRaw();
-				requestTraceSource.TraceRequest(currentRequest.HttpMethod, currentRequest.Headers.ToString(), requestContent, context.GetFullUrlWithMethod(), context.GetClientIp(), context.GetSessionId());
+				requestTraceSource.TraceRequest(currentRequest.HttpMethod, GetObjectContent(currentRequest.Headers), requestContent, context.GetFullUrlWithMethod(), context.GetClientIp(), context.GetSessionId());
 			}
 			catch (Exception exp)
 			{
@@ -62,7 +62,7 @@ namespace Recodify.Logging.Mvc
 				var timer = filterContext.HttpContext.Items[timerKey] as Stopwatch;
 				timer.Stop();
 
-				var responseContent = GetResponseContent(filterContext);
+				var responseContent = GetObjectContent(filterContext.Controller.ViewData.Model);
 
 				var currentResponse = filterContext.HttpContext.Response;
 				responseTraceSource.TraceResponse(currentResponse.StatusCode, currentResponse.Headers.ToString(), responseContent, timer.ElapsedMilliseconds, context.GetFullUrlWithMethod(), context.GetSessionId());
@@ -88,10 +88,10 @@ namespace Recodify.Logging.Mvc
 			filterContext.HttpContext.Items[outputFilterKey] = filter;
 		}
 
-		private static string GetResponseContent(ActionExecutedContext filterContext)
+		private static string GetObjectContent(object obj)
 		{
 			var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = ReferenceLoopHandling.Serialize};
-			return "model: " + JsonConvert.SerializeObject(filterContext.Controller.ViewData.Model, Formatting.Indented, jsonSettings);
+			return JsonConvert.SerializeObject(obj, Formatting.Indented, jsonSettings);
 		}		
 	
 		private bool IsExcluded(string url)
