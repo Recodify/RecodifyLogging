@@ -10,12 +10,21 @@
     <copyright>Copyright 2016</copyright>
   </metadata>
     <files>
-<file src="src\Package.Logging.Listeners\bin\Release\Recodify.Logging.Listeners.dll" target="lib\net40" />
-<file src="src\Recodify.Logging.Mvc\bin\Release\Recodify.Logging.Mvc.dll" target="lib\net40" />
-<file src="src\Package.Logging.Trace\bin\Release\Recodify.Logging.Trace.dll" target="lib\net40" />
+		<file src="src\Package.Logging.Listeners\bin\Release\Recodify.Logging.Listeners.dll" target="lib\net40" />
+		<file src="src\Recodify.Logging.Mvc\bin\Release\Recodify.Logging.Mvc.dll" target="lib\net40" />
+		<file src="src\Package.Logging.Trace\bin\Release\Recodify.Logging.Trace.dll" target="lib\net40" />
 
-<file src="src\Recodify.Logging.Web\bin\Release\Recodify.Logging.Web.dll" target="lib\net40" />
-<file src="src\Package.Logging.WebApi\bin\Release\Recodify.Logging.WebApi.dll" target="lib\net40" />
-<file src="src\Package.Messaging.RabbitMq\bin\Release\Collinson.Messaging.RabbitMq.dll" target="lib\net40" />
-</files>
+		<file src="src\Recodify.Logging.Web\bin\Release\Recodify.Logging.Web.dll" target="lib\net40" />
+		<file src="src\Package.Logging.WebApi\bin\Release\Recodify.Logging.WebApi.dll" target="lib\net40" />
+		<file src="src\Package.Messaging.RabbitMq\bin\Release\Collinson.Messaging.RabbitMq.dll" target="lib\net40" />
+	</files>
+	<dependencies>
+	  <dependency id="Castle.Core" version="3.2.2" />
+	  <dependency id="Castle.Windsor" version="3.2.1" />	  
+	  <dependency id="EasyNetQ" version="0.34.0.279" />
+	  <dependency id="EasyNetQ.Management.Client" version="0.39.2.333" />
+	  <dependency id="Iesi.Collections" version="3.2.0.4000" />
+	  <dependency id="Newtonsoft.Json" version="7.0.1" />
+	  <dependency id="RabbitMQ.Client" version="3.3.2" />
+	</dependencies>
 </package>
