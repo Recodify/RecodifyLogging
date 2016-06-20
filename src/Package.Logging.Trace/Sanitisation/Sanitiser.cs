@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Recodify.Logging.Trace.Sanitisation
 {
     public class Sanitiser : ISanitiser
@@ -10,13 +12,14 @@ namespace Recodify.Logging.Trace.Sanitisation
         }
 
         public Sanitiser(IContentSanitiser contentSanitiser, IUrlSanitiser urlSanitiser)
-        {
-            this.contentSanitiser = contentSanitiser;
+        {			
+			this.contentSanitiser = contentSanitiser;
             this.urlSanitiser = urlSanitiser;
         }
 
 	    public string Sanitise(string input)
 	    {
+			
 	        var sanitised = SanitiseJsonPassword(input);
             return SanitiseUrl(sanitised);
         }

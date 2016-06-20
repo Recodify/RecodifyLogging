@@ -58,7 +58,7 @@ namespace Recodify.Logging.Trace
 		}
 
 		public virtual void TraceRequest(string requestMethod, string headers, string content, string url, string ipAddress, string sessionId = null)
-		{
+		{ 			
 			var fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);
 
 			try

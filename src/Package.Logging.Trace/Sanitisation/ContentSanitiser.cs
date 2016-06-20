@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System.Configuration;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Recodify.Logging.Trace.Sanitisation
 {
@@ -39,7 +40,7 @@ namespace Recodify.Logging.Trace.Sanitisation
 		private IEnumerable<string> SanitisedFields
 		{
 			get
-			{
+			{				
 				var sanitisedFields = ConfigurationManager.AppSettings["RecodifyLogging:SantisedFields"];
 				if (string.IsNullOrWhiteSpace(sanitisedFields))
 				{
