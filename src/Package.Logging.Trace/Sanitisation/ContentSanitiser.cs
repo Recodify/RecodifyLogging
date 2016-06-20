@@ -3,18 +3,20 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using System.Configuration;
+using System.Linq;
 
 namespace Recodify.Logging.Trace.Sanitisation
 {
     public class ContentSanitiser : IContentSanitiser
     {
-        private static readonly JsonSerializerSettings CamelCaseSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), Formatting = Formatting.Indented };
+        private static readonly JsonSerializerSettings CamelCaseSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), Formatting = Formatting.Indented };		
 
         public ContentSanitiser()
         {
             var enumConverter = new StringEnumConverter();
             CamelCaseSerializerSettings.Converters.Add(enumConverter);
-        }
+        }		
 
         public string Sanitise(string source)
         {
@@ -33,6 +35,20 @@ namespace Recodify.Logging.Trace.Sanitisation
                 return source;
             }
         }
+
+		private IEnumerable<string> SanitisedFields
+		{
+			get
+			{
+				var sanitisedFields = ConfigurationManager.AppSettings["RecodifyLogging:SantisedFields"];
+				if (string.IsNullOrWhiteSpace(sanitisedFields))
+				{
+					return new string[] { };
+				}
+
+				return sanitisedFields.Split(',').Select(x => x?.ToLower());
+			}
+		}
 
         private bool Sanitise(JToken source)
         {
@@ -65,7 +81,7 @@ namespace Recodify.Logging.Trace.Sanitisation
             var sanitized = false;
             foreach (var p in source.Properties())
             {
-                if (p.Name.ToLower() == "password" && !p.Value.HasValues)
+                if (SanitisedFields.Contains(p.Name.ToLower()) && !p.Value.HasValues)
                 {
                     p.Value = "******";
                     sanitized = true;
