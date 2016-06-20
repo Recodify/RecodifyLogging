@@ -130,7 +130,7 @@ To begin using:
 		{
 			var requestTraceSource = new SanitisedTraceSource("Request", new Sanitiser());
 			var responseTraceSource = new SanitisedTraceSource("Response", new Sanitiser());
-            config.MessageHandlers.Add(new LogHandler(requestTraceSource, responseTraceSource, new HttpContext()));	
+            config.MessageHandlers.Add(new LogHandler(requestTraceSource, responseTraceSource, new HttpContext(), new Options()));	
         }
     }
 
