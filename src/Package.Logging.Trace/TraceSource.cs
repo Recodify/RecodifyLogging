@@ -22,42 +22,42 @@ namespace Recodify.Logging.Trace
 			traceSource = new System.Diagnostics.TraceSource(name, defaultLevel);
 		}
 
-		public void TraceData(TraceEventType eventType, int id, object data)
+		public virtual void TraceData(TraceEventType eventType, int id, object data)
 		{
 			traceSource.TraceData(eventType, id, data);
 		}
 
-		public void TraceData(TraceEventType eventType, int id, params object[] data)
+		public virtual void TraceData(TraceEventType eventType, int id, params object[] data)
 		{
 			traceSource.TraceData(eventType, id, data);
 		}
 
-		public void TraceEvent(TraceEventType eventType, int id, string message)
+		public virtual void TraceEvent(TraceEventType eventType, int id, string message)
 		{
 			traceSource.TraceEvent(eventType, id, message);
 		}
 
-		public void TraceEvent(TraceEventType eventType, int id, string format, params object[] args)
+		public virtual void TraceEvent(TraceEventType eventType, int id, string format, params object[] args)
 		{
 			traceSource.TraceEvent(eventType, id, format, args);
 		}
 
-		public void TraceInformation(string message)
+		public virtual void TraceInformation(string message)
 		{
 			traceSource.TraceInformation(message);
 		}
 
-		public void TraceInformation(string format, params object[] args)
+		public virtual void TraceInformation(string format, params object[] args)
 		{
 			traceSource.TraceInformation(format, args);
 		}
 
-		public void TraceTransfer(int id, string message, Guid relatedActivityId)
+		public virtual void TraceTransfer(int id, string message, Guid relatedActivityId)
 		{
 			traceSource.TraceTransfer(id, message, relatedActivityId);
 		}
 
-		public void TraceRequest(string requestMethod, string headers, string content, string url, string ipAddress, string sessionId = null)
+		public virtual void TraceRequest(string requestMethod, string headers, string content, string url, string ipAddress, string sessionId = null)
 		{
 			var fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);
 
@@ -80,7 +80,7 @@ namespace Recodify.Logging.Trace
 			}
 		}
 
-		public void TraceResponse(int statusCode, string headers, string content, long timing, string url, string sessionId = null)
+		public virtual void TraceResponse(int statusCode, string headers, string content, long timing, string url, string sessionId = null)
 		{
 			try
 			{
