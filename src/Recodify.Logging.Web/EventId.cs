@@ -1,4 +1,4 @@
-﻿namespace Recodify.Logging.Web
+﻿namespace Recodify.Logging.Common
 {
     public enum EventId : int
     {

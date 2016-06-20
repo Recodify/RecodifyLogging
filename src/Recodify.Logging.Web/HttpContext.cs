@@ -1,7 +1,8 @@
 ﻿using Microsoft.Owin;
+using System.Net.Http;
 using System.Web;
 
-namespace Recodify.Logging.Web
+namespace Recodify.Logging.Common
 {
 	public class HttpContext : IContext
 	{
@@ -25,7 +26,7 @@ namespace Recodify.Logging.Web
 		}
 
 		public string GetFullUrlWithMethod()
-		{
+		{			
 			var currentContext = System.Web.HttpContext.Current;
 			if (currentContext == null)
 			{
@@ -53,16 +54,15 @@ namespace Recodify.Logging.Web
 		}
 
 		public string GetClientIp()
-		{
+		{		
 			if (IsLegacyRequestContext())
 			{
 				var context = GetLegacyContext();
-				return ((HttpContextWrapper)context.Items["MS_HttpContext"]).Request.UserHostAddress;
+				return context.Request.UserHostAddress;
 			}
 			else
 			{
-				var context = GetOwinContext();
-				var properties = context.Request.Environment;
+				var context = GetOwinContext();				
 				return context.Request.RemoteIpAddress;
 			}
 		}
@@ -74,7 +74,7 @@ namespace Recodify.Logging.Web
 
 		private bool IsLegacyRequestContext()
 		{
-			if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.Request != null && GetOwinContext() == null)
+			if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.Request != null && System.Web.HttpContext.Current.Items["owin.Environment"] == null)
 				return true;
 
 			return false;
@@ -87,6 +87,7 @@ namespace Recodify.Logging.Web
 
 		private IOwinContext GetOwinContext()
 		{
+		
 			return System.Web.HttpContext.Current.GetOwinContext();
 		}
 	}

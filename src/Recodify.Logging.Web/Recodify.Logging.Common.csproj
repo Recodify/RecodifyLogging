@@ -7,8 +7,8 @@
     <ProjectGuid>{09B891C7-ABA6-4A90-8EEF-434BC02EB719}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Recodify.Logging.Web</RootNamespace>
-    <AssemblyName>Recodify.Logging.Web</AssemblyName>
+    <RootNamespace>Recodify.Logging.Common</RootNamespace>
+    <AssemblyName>Recodify.Logging.Common</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Event.cs" />
     <Compile Include="EventId.cs" />
     <Compile Include="HttpContext.cs" />
     <Compile Include="IContext.cs" />

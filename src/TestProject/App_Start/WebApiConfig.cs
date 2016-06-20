@@ -1,14 +1,11 @@
-﻿using Recodify.Logging.Trace;
-using Recodify.Logging.Web;
+﻿using Recodify.Logging.Common;
+using Recodify.Logging.Trace;
 using Recodify.Logging.WebApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 
 namespace TestProject
 {
-    public static class WebApiConfig
+	public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
@@ -25,7 +22,7 @@ namespace TestProject
 
 			config.MessageHandlers.Add(new LogHandler(new TraceSource("requestTraceSource"),
 				new TraceSource("responseTraceSource"),
-				new Recodify.Logging.Web.HttpContext(),
+				new Recodify.Logging.Common.HttpContext(),
 				new Options()));
         }
     }

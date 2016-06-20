@@ -1,4 +1,4 @@
-﻿using Recodify.Logging.Web;
+﻿using Recodify.Logging.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -76,7 +76,7 @@ namespace Recodify.Logging.Trace
 			}
 			catch(Exception exp)
 			{
-				fallbackTraceSource.TraceData(TraceEventType.Error, 9883, exp);
+				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
 			}
 		}
 
@@ -99,7 +99,7 @@ namespace Recodify.Logging.Trace
 			}
 			catch (Exception exp)
 			{
-				fallbackTraceSource.TraceData(TraceEventType.Error, 9883, exp);
+				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
 			}
 		}
 

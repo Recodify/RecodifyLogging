@@ -1,5 +1,5 @@
 ﻿using Recodify.Logging.Trace;
-using Recodify.Logging.Web;
+using Recodify.Logging.Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -43,7 +43,7 @@ namespace Recodify.Logging.WebApi
 			}
 			catch (Exception exp)
 			{
-				fallbackTraceSource.TraceData(TraceEventType.Error, 9883, exp);
+				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
 				return await base.SendAsync(request, cancellationToken);
 			}
 
@@ -52,7 +52,14 @@ namespace Recodify.Logging.WebApi
 
 			var requestContent = await request.Content.ReadAsStringAsync();
 
-			requestTraceSource.TraceRequest(request.Method.ToString(), request.Headers.ToString(), requestContent, context.GetFullUrlWithMethod(), context.GetClientIp(), context.GetSessionId());
+			try
+			{
+				requestTraceSource.TraceRequest(request.Method.ToString(), request.Headers.ToString(), requestContent, context.GetFullUrlWithMethod(), context.GetClientIp(), context.GetSessionId());
+			}
+			catch (Exception exp)
+			{
+				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
+			}
 
 			// Response
 			var response = await base.SendAsync(request, cancellationToken);
@@ -72,7 +79,7 @@ namespace Recodify.Logging.WebApi
 			}
 			catch (Exception exp)
 			{			
-				fallbackTraceSource.TraceData(TraceEventType.Error, 9883, exp);
+				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
 			}
 
 			return response;

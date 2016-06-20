@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Recodify.Logging.Trace.Sanitisation;
 using System.Collections.Generic;
-using Recodify.Logging.Web;
+using Recodify.Logging.Common;
 
 namespace Recodify.Logging.Trace
 {   

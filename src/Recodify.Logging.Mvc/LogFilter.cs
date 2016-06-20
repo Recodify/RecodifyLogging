@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Recodify.Logging.Trace;
-using Recodify.Logging.Web;
+using Recodify.Logging.Common;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -48,7 +48,7 @@ namespace Recodify.Logging.Mvc
 			}
 			catch (Exception exp)
 			{
-				fallbackTraceSource.TraceData(TraceEventType.Error, 9883, exp);
+				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
 			}
 		}
 
@@ -69,7 +69,7 @@ namespace Recodify.Logging.Mvc
 			}
 			catch (Exception exp)
 			{				
-				fallbackTraceSource.TraceData(TraceEventType.Error, 9883, exp);
+				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
 			}
 		}
 

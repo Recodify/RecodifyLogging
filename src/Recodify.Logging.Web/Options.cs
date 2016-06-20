@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Recodify.Logging.Web
+namespace Recodify.Logging.Common
 {
     public interface IOptions
     {

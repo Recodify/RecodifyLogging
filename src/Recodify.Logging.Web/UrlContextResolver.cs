@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Recodify.Logging.Web
+namespace Recodify.Logging.Common
 {
     public class UrlContextResolver
     {

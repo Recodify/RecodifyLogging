@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "src\UnitTests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recodify.Logging.Mvc", "src\Recodify.Logging.Mvc\Recodify.Logging.Mvc.csproj", "{C95ABB65-5D3E-4EE6-B35C-FB0FF9FE9380}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recodify.Logging.Web", "src\Recodify.Logging.Web\Recodify.Logging.Web.csproj", "{09B891C7-ABA6-4A90-8EEF-434BC02EB719}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Recodify.Logging.Common", "src\Recodify.Logging.Web\Recodify.Logging.Common.csproj", "{09B891C7-ABA6-4A90-8EEF-434BC02EB719}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "src\TestProject\TestProject.csproj", "{16C81B98-C34B-4E15-ACE7-A9228F5FF897}"
 EndProject

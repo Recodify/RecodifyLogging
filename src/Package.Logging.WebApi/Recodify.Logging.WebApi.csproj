@@ -54,9 +54,9 @@
       <Project>{71597acc-4578-49d6-aa17-dc5c324476cb}</Project>
       <Name>Recodify.Logging.Trace</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Recodify.Logging.Web\Recodify.Logging.Web.csproj">
+    <ProjectReference Include="..\Recodify.Logging.Web\Recodify.Logging.Common.csproj">
       <Project>{09b891c7-aba6-4a90-8eef-434bc02eb719}</Project>
-      <Name>Recodify.Logging.Web</Name>
+      <Name>Recodify.Logging.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
