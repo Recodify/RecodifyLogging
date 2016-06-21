@@ -32,26 +32,23 @@ namespace Recodify.Logging.WebApi
 		}
 
 		protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
-		{
-			var fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);
-
-			try
+		{			
+			if (options.ExcludeUrls.Any(x => request.RequestUri.AbsoluteUri.ToLower().Contains(x)))
 			{
-				// Request
-				if (options.ExcludeUrls.Any(x => request.RequestUri.AbsoluteUri.ToLower().Contains(x)))
-				{
-					return await base.SendAsync(request, cancellationToken);
-				}
-			}
-			catch (Exception exp)
-			{
-				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
 				return await base.SendAsync(request, cancellationToken);
 			}
 
+			var fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);
 			var sw = new Stopwatch();
-			sw.Start();
+			sw.Start();			
 
+			await LogRequest(request, fallbackTraceSource);
+			
+			return await LogResponse(request, cancellationToken, fallbackTraceSource, sw);
+		}
+
+		private async Task LogRequest(HttpRequestMessage request, System.Diagnostics.TraceSource fallbackTraceSource)
+		{
 			var requestContent = await request.Content.ReadAsStringAsync();
 
 			try
@@ -63,13 +60,15 @@ namespace Recodify.Logging.WebApi
 			{
 				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
 			}
+		}
 
-			// Response
+		private async Task<HttpResponseMessage> LogResponse(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken, System.Diagnostics.TraceSource fallbackTraceSource, Stopwatch sw)
+		{
 			var response = await base.SendAsync(request, cancellationToken);
-			
+
 			if (response == null || response.Content == null)
 				return response;
-						
+
 			var responseContent = await response.Content.ReadAsStringAsync();
 
 			try
@@ -81,7 +80,7 @@ namespace Recodify.Logging.WebApi
 				responseTraceSource.TraceResponse((int)response.StatusCode, responseHeaders, responseContent, sw.ElapsedMilliseconds, context.GetFullUrlWithMethod(), context.GetSessionId());
 			}
 			catch (Exception exp)
-			{			
+			{
 				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
 			}
 
