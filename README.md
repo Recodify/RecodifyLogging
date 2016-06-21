@@ -21,6 +21,8 @@ To begin using:
         <add key="RecodifyLogging:Environment" value="Local" />  
         <!--    This is the connection string to your rabbitMQ instance -->
         <add key="RabbitMqConnectionString" value="host=cascadelogs.cloudapp.net;virtualHost=/;username=publisher;password=snowwhite"/>
+        <!--    This is used to specify which fields should be sanitised when using the sanistised tracesource -->
+        <add key="RecodifyLogging:SantisedFields" value="password,x-password"/>
 3. Add the below configuration to `Web.config`
 
 	     <system.diagnostics>
@@ -133,6 +135,17 @@ To begin using:
             config.MessageHandlers.Add(new LogHandler(requestTraceSource, responseTraceSource, new HttpContext(), new Options()));	
         }
     }
+    
+Things to note
+---------------
+
+WebAPI logging is provided using an async delegating message handler that makes use of the await syntax. The await syntax is not supported in asp.net 4.0 so you must use asp.net 4.5. If you are upgrading a 4.0 project to 4.5, you will need to ensure that 
+you have the following in your web.config:
+
+            <system.web>
+                <httpRuntime targetFramework="4.5" />
+                
+see: https://blogs.msdn.microsoft.com/webdev/2012/11/19/all-about-httpruntime-targetframework/ 
 
 Dependencies
 ------------
