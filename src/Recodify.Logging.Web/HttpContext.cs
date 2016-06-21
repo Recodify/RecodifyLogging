@@ -47,10 +47,10 @@ namespace Recodify.Logging.Common
 			var sessionid = currentContext.Request.Headers["x-sessionid"];
 			if (sessionid == null)
 			{
-				return string.Empty;
+				sessionid = currentContext.Items["x-sessionid"] as string;
 			}
 
-			return sessionid;
+			return sessionid ?? string.Empty;
 		}
 
 		public string GetClientIp()
