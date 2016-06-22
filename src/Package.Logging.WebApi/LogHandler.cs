@@ -58,11 +58,7 @@ namespace Recodify.Logging.WebApi
 				requestTraceSource.TraceRequest(
 					request.Method.ToString(), 
 					GetRequestHeaders(request),
-					requestContent,
-					context.GetFullUrlWithMethod(), 
-					context.GetClientIp(),
-					GetObjectContent(Thread.CurrentPrincipal?.Identity, ReferenceLoopHandling.Ignore),
-					context.GetSessionId());
+					requestContent);
 			}
 			catch (Exception exp)
 			{
@@ -89,10 +85,7 @@ namespace Recodify.Logging.WebApi
 					(int)response.StatusCode, 
 					responseHeaders,
 					responseContent,
-					sw.ElapsedMilliseconds,
-					context.GetFullUrlWithMethod(),
-					GetObjectContent(Thread.CurrentPrincipal?.Identity, ReferenceLoopHandling.Ignore),
-					context.GetSessionId());
+					sw.ElapsedMilliseconds);
 			}
 			catch (Exception exp)
 			{

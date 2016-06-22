@@ -3,6 +3,7 @@ namespace Recodify.Logging.Common
 {
 	public enum Event
 	{
-		LoggingExceptionFallingBack = 9883
+		Information = 1000,
+		LoggingExceptionFallingBack = 9883		
 	}
 }

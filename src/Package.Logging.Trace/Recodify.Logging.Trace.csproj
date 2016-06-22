@@ -56,7 +56,9 @@
     <Compile Include="Sanitisation\Sanitiser.cs" />
     <Compile Include="Sanitisation\UrlSanitiser.cs" />
     <Compile Include="SanitisedTraceSource.cs" />
+    <Compile Include="SerializationHelper.cs" />
     <Compile Include="TraceSource.cs" />
+    <Compile Include="WebDataEnricher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

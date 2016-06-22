@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Recodify.Logging.Trace;
+using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using System.Threading;
 using System.Web;
@@ -14,13 +16,14 @@ namespace TestProject.Controllers
 	public class HomeController : Controller
 	{
 		public ActionResult Index()
-		{
-			Thread.Sleep(10);
+		{			
+			new TraceSource("diagTraceSource").TraceData(System.Diagnostics.TraceEventType.Information, 100, "A message");
 			return View(new MyModel { JohnStinks = "a lot" });
 		}
 
 		public ActionResult About()
 		{
+			
 			ViewBag.Message = "Your application description page.";
 
 			return View();

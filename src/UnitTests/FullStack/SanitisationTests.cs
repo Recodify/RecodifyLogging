@@ -22,7 +22,7 @@ namespace UnitTests.FullStack
 			var traceSource = new Recodify.Logging.Trace.SanitisedTraceSource("Request", new Sanitiser(), mockTrace.Object);
 			
 			var sessionId = Guid.NewGuid().ToString();
-			traceSource.TraceRequest("GET", "someHeader", "someContent", "http://asdf.com", "127.0.0.1", sessionId);
+			traceSource.TraceRequest("GET", "someHeader", "someContent");
 			mockTrace.Setup(x => x.TraceData(TraceEventType.Information, (int)EventId.RequestReceived, It.Is<object[]>(y => y.Any(o => ((KeyValuePair<string,object>)o).Value.ToString() == sessionId))));
 		}		
 	}

@@ -10,11 +10,13 @@ namespace Recodify.Logging.Trace
 		private readonly System.Diagnostics.TraceSource traceSource;
 		private readonly System.Diagnostics.TraceSource fallbackTraceSource;
 		private const string fallbackKey = "Fallback";
+		private readonly WebDataEnricher enricher;
 
 		public TraceSource(string name)
 		{
 			traceSource = new System.Diagnostics.TraceSource(name);
-			fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);			
+			fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);
+			enricher = new WebDataEnricher();
 		}		
 
 		public TraceSource(string name, SourceLevels defaultLevel)
@@ -24,31 +26,37 @@ namespace Recodify.Logging.Trace
 
 		public virtual void TraceData(TraceEventType eventType, int id, object data)
 		{
-			traceSource.TraceData(eventType, id, data);
+			var args = enricher.Enrich(new[] { data }, true);
+			traceSource.TraceData(eventType, id, args);
 		}
 
 		public virtual void TraceData(TraceEventType eventType, int id, params object[] data)
 		{
+			data = enricher.Enrich(data);
 			traceSource.TraceData(eventType, id, data);
 		}
 
 		public virtual void TraceEvent(TraceEventType eventType, int id, string message)
 		{
-			traceSource.TraceEvent(eventType, id, message);
+			var args = enricher.Enrich(new[] { message }, true);
+			traceSource.TraceData(eventType, id, args);
 		}
 
 		public virtual void TraceEvent(TraceEventType eventType, int id, string format, params object[] args)
 		{
-			traceSource.TraceEvent(eventType, id, format, args);
+			args = enricher.Enrich(args);
+			traceSource.TraceData(eventType, id, args);
 		}
 
 		public virtual void TraceInformation(string message)
 		{
-			traceSource.TraceInformation(message);
+			var args = enricher.Enrich(new[] { message }, true);
+			traceSource.TraceData(TraceEventType.Information, (int)Event.Information, args);
 		}
 
 		public virtual void TraceInformation(string format, params object[] args)
 		{
+			args = enricher.Enrich(args);
 			traceSource.TraceInformation(format, args);
 		}
 
@@ -57,7 +65,7 @@ namespace Recodify.Logging.Trace
 			traceSource.TraceTransfer(id, message, relatedActivityId);
 		}
 
-		public virtual void TraceRequest(string requestMethod, string headers, string content, string url, string ipAddress, string identity, string sessionId = null)
+		public virtual void TraceRequest(string requestMethod, string headers, string content)
 		{			
 			var fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);
 			
@@ -65,15 +73,11 @@ namespace Recodify.Logging.Trace
 			{
 				TraceData(
 				   TraceEventType.Information,
-				   (int)EventId.RequestReceived,
-				   new KeyValuePair<string, object>("requestUrl", url),
-				   new KeyValuePair<string, object>("httpMethod", requestMethod),				   
+				   (int)EventId.RequestReceived,				   
+				   new KeyValuePair<string, object>("httpMethod", requestMethod),
 				   new KeyValuePair<string, object>("headers", headers),
 				   new KeyValuePair<string, object>("message", content),
-				   new KeyValuePair<string, object>("tags", new[] { "request", "http" }),
-				   new KeyValuePair<string, object>("sessionId", sessionId),
-				   new KeyValuePair<string, object>("clientip", ipAddress),
-				   new KeyValuePair<string, object>("identity", identity));
+				   new KeyValuePair<string, object>("tags", new[] { "request", "http" }));				 
 			}
 			catch(Exception exp)
 			{
@@ -81,21 +85,21 @@ namespace Recodify.Logging.Trace
 			}
 		}
 
-		public virtual void TraceResponse(int statusCode, string headers, string content, long timing, string url, string identity, string sessionId = null)
+		public virtual void TraceResponse(int statusCode, string headers, string content, long timing)
 		{
 			try
 			{
 				if (statusCode < 399)
 				{
-					RaiseTraceResponse(TraceEventType.Information, statusCode, headers, content, timing, url, identity, sessionId);
+					RaiseTraceResponse(TraceEventType.Information, statusCode, headers, content, timing);
 				}
 				else if (statusCode >= 400 && statusCode <= 499)
 				{
-					RaiseTraceResponse(TraceEventType.Warning, statusCode, headers, content, timing, url, identity, sessionId);
+					RaiseTraceResponse(TraceEventType.Warning, statusCode, headers, content, timing);
 				}
 				else if (statusCode > 499)
 				{
-					RaiseTraceResponse(TraceEventType.Error, statusCode, headers, content, timing, url, identity, sessionId);
+					RaiseTraceResponse(TraceEventType.Error, statusCode, headers, content, timing);
 				}
 			}
 			catch (Exception exp)
@@ -104,18 +108,16 @@ namespace Recodify.Logging.Trace
 			}
 		}
 
-		private void RaiseTraceResponse(TraceEventType eventType, int statusCode, string headers, string content, long timing, string url, string identity, string sessionId)
+		private void RaiseTraceResponse(TraceEventType eventType, int statusCode, string headers, string content, long timing)
 		{
 			TraceData(
 				eventType,
-				statusCode,
-				new KeyValuePair<string, object>("requestUrl", url),
+				statusCode,				
 				new KeyValuePair<string, object>("responseTime", timing),				
 				new KeyValuePair<string, object>("headers", headers),
 				new KeyValuePair<string, object>("message", content),
-				new KeyValuePair<string, object>("tags", new[] { "response", "http" }),
-				new KeyValuePair<string, object>("sessionId", sessionId ?? string.Empty),
-				new KeyValuePair<string, object>("identity", identity));
+				new KeyValuePair<string, object>("statusCode", statusCode),
+				new KeyValuePair<string, object>("tags", new[] { "response", "http" }));
 		}
 	}
 }

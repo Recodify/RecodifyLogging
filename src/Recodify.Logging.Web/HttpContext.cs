@@ -1,6 +1,8 @@
 ﻿using Microsoft.Owin;
 using System.Diagnostics;
 using System.Net.Http;
+using System.Security.Principal;
+using System.Threading;
 using System.Web;
 
 namespace Recodify.Logging.Common
@@ -12,6 +14,16 @@ namespace Recodify.Logging.Common
 		public HttpContext()
 		{
 			contextResolver = new UrlContextResolver();
+		}
+
+		public IIdentity GetIdentity()
+		{
+			if (Thread.CurrentPrincipal == null || Thread.CurrentPrincipal.Identity == null)
+			{
+				return new GenericIdentity("Anonymous");
+			}
+
+			return Thread.CurrentPrincipal.Identity;
 		}
 
 		public string GetContextString()
