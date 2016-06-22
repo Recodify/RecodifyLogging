@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -17,6 +18,12 @@ namespace TestProject
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+		protected void Application_BeginRequest(object sender, EventArgs e)
+		{
+			System.Web.HttpContext.Current.Items.Add("x-sessionid",Guid.NewGuid());
+		}
+
 
 		// This captures the HTML response which is normall overkill for logging with the model representing the state and the html being static.
 		/*

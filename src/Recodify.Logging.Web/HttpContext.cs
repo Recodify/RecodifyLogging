@@ -48,7 +48,7 @@ namespace Recodify.Logging.Common
 			var sessionid = currentContext.Request.Headers["x-sessionid"];
 			if (sessionid == null)
 			{
-				sessionid = currentContext.Items["x-sessionid"] as string;
+				sessionid = currentContext.Items["x-sessionid"]?.ToString();
 			}
 
 			return sessionid ?? string.Empty;

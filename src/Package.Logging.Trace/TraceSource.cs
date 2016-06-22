@@ -14,13 +14,13 @@ namespace Recodify.Logging.Trace
 		public TraceSource(string name)
 		{
 			traceSource = new System.Diagnostics.TraceSource(name);
-			fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);
-		}
+			fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);			
+		}		
 
 		public TraceSource(string name, SourceLevels defaultLevel)
 		{
 			traceSource = new System.Diagnostics.TraceSource(name, defaultLevel);
-		}
+		}		
 
 		public virtual void TraceData(TraceEventType eventType, int id, object data)
 		{

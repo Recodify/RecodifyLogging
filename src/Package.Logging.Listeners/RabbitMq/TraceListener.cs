@@ -15,9 +15,11 @@ namespace Recodify.Logging.Listeners.RabbitMq
     {
         private const string requestIdKey = "RequestId";
         private readonly string machineName = Environment.MachineName;
-        private readonly IPublisher publisher;
+        private IPublisher publisher;
         private readonly string componentName;
         private readonly TraceSource fallbackSource;
+		private readonly string exchangeName;
+		private readonly string queueName;
 
         [ResourceExposure(ResourceScope.Machine)]
         [ResourceConsumption(ResourceScope.Machine)]
@@ -27,15 +29,26 @@ namespace Recodify.Logging.Listeners.RabbitMq
                 throw new ArgumentException("You must supply an exchange and queue as a single string comman delimited string: e.g. LogExchange,LogQueue");
 
             var initData = data.Split(',');
-            var exchangeName = initData.First();
-            var queueName = initData.Skip(1).First();
+            exchangeName = initData.First();
+            queueName = initData.Skip(1).First();
             componentName = initData.Last();
 
-            fallbackSource = new TraceSource("Fallback");
-
-            var busFactory = new BusFactory();
-            publisher = new Publisher(busFactory, new EventLogSettings { ExchangeName = exchangeName, QueueName = queueName});
+            fallbackSource = new TraceSource("Fallback");                   
         }
+
+		protected virtual IPublisher Publisher
+		{
+			get
+			{
+				if (publisher == null)
+				{
+					var busFactory = new BusFactory();
+					publisher = new Publisher(busFactory, new EventLogSettings { ExchangeName = exchangeName, QueueName = queueName });
+				}
+
+				return publisher;
+			}
+		}
 
         public override void Write(string message)
         {
@@ -169,7 +182,7 @@ namespace Recodify.Logging.Listeners.RabbitMq
         {
             try
             {				
-                publisher.Publish(log);
+                Publisher.Publish(log);
             }
             catch(Exception exp)
             {
@@ -181,7 +194,7 @@ namespace Recodify.Logging.Listeners.RabbitMq
         {
             try
             {				
-				publisher.Publish(log);
+				Publisher.Publish(log);
             }
             catch (Exception exp)
             {
