@@ -104,14 +104,14 @@ namespace Recodify.Logging.Trace
 			return args.Select(arg => SantitiseObject(arg)).ToArray();
 		}
 
-		public void TraceResponse(int statusCode, string headers, string content, long timing, string url, string sessionId = null)
+		public void TraceResponse(int statusCode, string headers, string content, long timing, string url, string identity, string sessionId = null)
 		{
-			traceSource.TraceResponse(statusCode, headers, content, timing, url, sessionId);
+			traceSource.TraceResponse(statusCode, headers, content, timing, url, identity, sessionId);
 		}
 
-		public void TraceRequest(string requestMethod, string headers, string content, string url, string ipAddress, string sessionId = null)
+		public void TraceRequest(string requestMethod, string headers, string content, string url, string ipAddress, string identity, string sessionId = null)
 		{
-			traceSource.TraceRequest(requestMethod, headers, content, url, ipAddress, sessionId);
+			traceSource.TraceRequest(requestMethod, headers, content, url, ipAddress, identity, sessionId);
 		}
 	}
 }

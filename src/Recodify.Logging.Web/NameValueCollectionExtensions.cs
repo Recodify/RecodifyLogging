@@ -5,12 +5,12 @@ namespace Recodify.Logging.Common
 {
 	public static class NameValueCollectionExtensions
 	{
-		public static IDictionary<string, IEnumerable<string>> ToDictionary(this NameValueCollection col)
+		public static IDictionary<string, string> ToDictionary(this NameValueCollection col)
 		{
-			var dict = new Dictionary<string, IEnumerable<string>>();
+			var dict = new Dictionary<string, string>();
 			foreach (var k in col.AllKeys)
 			{
-				dict.Add(k, new[] { col[k] });
+				dict.Add(k, col[k]);
 			}
 			return dict;
 		}

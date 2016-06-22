@@ -57,7 +57,7 @@ namespace Recodify.Logging.Trace
 			traceSource.TraceTransfer(id, message, relatedActivityId);
 		}
 
-		public virtual void TraceRequest(string requestMethod, string headers, string content, string url, string ipAddress, string sessionId = null)
+		public virtual void TraceRequest(string requestMethod, string headers, string content, string url, string ipAddress, string identity, string sessionId = null)
 		{			
 			var fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);
 			
@@ -72,7 +72,8 @@ namespace Recodify.Logging.Trace
 				   new KeyValuePair<string, object>("message", content),
 				   new KeyValuePair<string, object>("tags", new[] { "request", "http" }),
 				   new KeyValuePair<string, object>("sessionId", sessionId),
-				   new KeyValuePair<string, object>("clientip", ipAddress));
+				   new KeyValuePair<string, object>("clientip", ipAddress),
+				   new KeyValuePair<string, object>("identity", identity));
 			}
 			catch(Exception exp)
 			{
@@ -80,21 +81,21 @@ namespace Recodify.Logging.Trace
 			}
 		}
 
-		public virtual void TraceResponse(int statusCode, string headers, string content, long timing, string url, string sessionId = null)
+		public virtual void TraceResponse(int statusCode, string headers, string content, long timing, string url, string identity, string sessionId = null)
 		{
 			try
 			{
 				if (statusCode < 399)
 				{
-					RaiseTraceResponse(TraceEventType.Information, statusCode, headers, content, timing, url, sessionId);
+					RaiseTraceResponse(TraceEventType.Information, statusCode, headers, content, timing, url, identity, sessionId);
 				}
 				else if (statusCode >= 400 && statusCode <= 499)
 				{
-					RaiseTraceResponse(TraceEventType.Warning, statusCode, headers, content, timing, url, sessionId);
+					RaiseTraceResponse(TraceEventType.Warning, statusCode, headers, content, timing, url, identity, sessionId);
 				}
 				else if (statusCode > 499)
 				{
-					RaiseTraceResponse(TraceEventType.Error, statusCode, headers, content, timing, url, sessionId);
+					RaiseTraceResponse(TraceEventType.Error, statusCode, headers, content, timing, url, identity, sessionId);
 				}
 			}
 			catch (Exception exp)
@@ -103,7 +104,7 @@ namespace Recodify.Logging.Trace
 			}
 		}
 
-		private void RaiseTraceResponse(TraceEventType eventType, int statusCode, string headers, string content, long timing, string url, string sessionId)
+		private void RaiseTraceResponse(TraceEventType eventType, int statusCode, string headers, string content, long timing, string url, string identity, string sessionId)
 		{
 			TraceData(
 				eventType,
@@ -113,7 +114,8 @@ namespace Recodify.Logging.Trace
 				new KeyValuePair<string, object>("headers", headers),
 				new KeyValuePair<string, object>("message", content),
 				new KeyValuePair<string, object>("tags", new[] { "response", "http" }),
-				new KeyValuePair<string, object>("sessionId", sessionId ?? string.Empty));
+				new KeyValuePair<string, object>("sessionId", sessionId ?? string.Empty),
+				new KeyValuePair<string, object>("identity", identity));
 		}
 	}
 }

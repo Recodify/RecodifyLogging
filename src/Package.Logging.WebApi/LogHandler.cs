@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Threading;
 
 namespace Recodify.Logging.WebApi
 {
@@ -54,7 +55,14 @@ namespace Recodify.Logging.WebApi
 			try
 			{
 				var requestHeaders = request.Headers.ToDictionary(k => k.Key, v => v.Value);
-				requestTraceSource.TraceRequest(request.Method.ToString(), GetRequestHeaders(request), requestContent, context.GetFullUrlWithMethod(), context.GetClientIp(), context.GetSessionId());
+				requestTraceSource.TraceRequest(
+					request.Method.ToString(), 
+					GetRequestHeaders(request),
+					requestContent,
+					context.GetFullUrlWithMethod(), 
+					context.GetClientIp(),
+					GetObjectContent(Thread.CurrentPrincipal?.Identity, ReferenceLoopHandling.Ignore),
+					context.GetSessionId());
 			}
 			catch (Exception exp)
 			{
@@ -77,7 +85,14 @@ namespace Recodify.Logging.WebApi
 				var statusCode = (int)response.StatusCode;
 				var responseHeaders = response.Content.Headers.ToString() + " " + response.Headers.ToString();
 
-				responseTraceSource.TraceResponse((int)response.StatusCode, responseHeaders, responseContent, sw.ElapsedMilliseconds, context.GetFullUrlWithMethod(), context.GetSessionId());
+				responseTraceSource.TraceResponse(
+					(int)response.StatusCode, 
+					responseHeaders,
+					responseContent,
+					sw.ElapsedMilliseconds,
+					context.GetFullUrlWithMethod(),
+					GetObjectContent(Thread.CurrentPrincipal?.Identity, ReferenceLoopHandling.Ignore),
+					context.GetSessionId());
 			}
 			catch (Exception exp)
 			{
@@ -92,6 +107,12 @@ namespace Recodify.Logging.WebApi
 			var headers = request.Headers.ToDictionary(k => k.Key, v => v.Value.Aggregate((c, n) => c + "," + n));
 			var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = ReferenceLoopHandling.Serialize };
 			return JsonConvert.SerializeObject(headers, Formatting.Indented, jsonSettings);
+		}
+
+		private static string GetObjectContent(object obj, ReferenceLoopHandling referenceLoopHandling = ReferenceLoopHandling.Serialize)
+		{
+			var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = referenceLoopHandling };
+			return JsonConvert.SerializeObject(obj, Formatting.Indented, jsonSettings);
 		}
 	}
 }

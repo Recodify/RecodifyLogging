@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using System.Threading;
 
 namespace Recodify.Logging.Mvc
 {
@@ -44,7 +45,14 @@ namespace Recodify.Logging.Mvc
 				SetupTimer(filterContext);
 
 				var requestContent = currentRequest.ToRaw();
-				requestTraceSource.TraceRequest(currentRequest.HttpMethod, GetObjectContent(currentRequest.Headers), requestContent, context.GetFullUrlWithMethod(), context.GetClientIp(), context.GetSessionId());
+				requestTraceSource.TraceRequest(
+					currentRequest.HttpMethod,
+					GetObjectContent(currentRequest.Headers.ToDictionary()), 
+					requestContent, 
+					context.GetFullUrlWithMethod(), 
+					context.GetClientIp(), 
+					GetObjectContent(Thread.CurrentPrincipal?.Identity, ReferenceLoopHandling.Ignore), 
+					context.GetSessionId());
 			}
 			catch (Exception exp)
 			{
@@ -65,7 +73,14 @@ namespace Recodify.Logging.Mvc
 				var responseContent = GetObjectContent(filterContext.Controller.ViewData.Model);
 
 				var currentResponse = filterContext.HttpContext.Response;
-				responseTraceSource.TraceResponse(currentResponse.StatusCode, currentResponse.Headers.ToString(), responseContent, timer.ElapsedMilliseconds, context.GetFullUrlWithMethod(), context.GetSessionId());
+				responseTraceSource.TraceResponse(
+					currentResponse.StatusCode,
+					currentResponse.Headers.ToString(),
+					responseContent,
+					timer.ElapsedMilliseconds, 
+					context.GetFullUrlWithMethod(),
+					GetObjectContent(Thread.CurrentPrincipal?.Identity, ReferenceLoopHandling.Ignore),
+					context.GetSessionId());
 			}
 			catch (Exception exp)
 			{				
@@ -88,9 +103,9 @@ namespace Recodify.Logging.Mvc
 			filterContext.HttpContext.Items[outputFilterKey] = filter;
 		}
 
-		private static string GetObjectContent(object obj)
+		private static string GetObjectContent(object obj, ReferenceLoopHandling referenceLoopHandling = ReferenceLoopHandling.Serialize)
 		{
-			var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = ReferenceLoopHandling.Serialize};
+			var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = referenceLoopHandling};
 			return JsonConvert.SerializeObject(obj, Formatting.Indented, jsonSettings);
 		}		
 	

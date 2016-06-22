@@ -13,7 +13,7 @@ namespace Recodify.Logging.Trace
 		void TraceInformation(string message);
 		void TraceInformation(string format, params object[] args);
 		void TraceTransfer(int id, string message, Guid relatedActivityId);
-		void TraceResponse(int statusCode, string headers, string content, long timing, string url, string sessionId = null);
-		void TraceRequest(string requestMethod, string headers, string content, string url, string ipAddress, string sessionId = null);
+		void TraceResponse(int statusCode, string headers, string content, long timing, string url, string identity, string sessionId = null);
+		void TraceRequest(string requestMethod, string headers, string content, string url, string ipAddress, string identity, string sessionId = null);
 	}
 }
