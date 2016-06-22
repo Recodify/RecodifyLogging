@@ -1,4 +1,5 @@
 ﻿using Microsoft.Owin;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Web;
 
@@ -43,7 +44,7 @@ namespace Recodify.Logging.Common
 			{
 				return string.Empty;
 			}
-
+			
 			var sessionid = currentContext.Request.Headers["x-sessionid"];
 			if (sessionid == null)
 			{
