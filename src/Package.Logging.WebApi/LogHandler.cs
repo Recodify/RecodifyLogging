@@ -98,11 +98,10 @@ namespace Recodify.Logging.WebApi
 		private static string GetRequestHeaders(HttpRequestMessage request)
 		{
 			var headers = request.Headers.ToDictionary(k => k.Key, v => v.Value.Aggregate((c, n) => c + "," + n));
-			var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = ReferenceLoopHandling.Serialize };
-			return JsonConvert.SerializeObject(headers, Formatting.Indented, jsonSettings);
+			return GetObjectContent(headers);
 		}
 
-		private static string GetObjectContent(object obj, ReferenceLoopHandling referenceLoopHandling = ReferenceLoopHandling.Serialize)
+		private static string GetObjectContent(object obj, ReferenceLoopHandling referenceLoopHandling = ReferenceLoopHandling.Ignore)
 		{
 			var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = referenceLoopHandling };
 			return JsonConvert.SerializeObject(obj, Formatting.Indented, jsonSettings);

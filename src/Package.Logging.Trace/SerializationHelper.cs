@@ -10,7 +10,7 @@ namespace Recodify.Logging.Trace
 {
 	public class SerializationHelper
 	{
-		public static string GetObjectContent(object obj, ReferenceLoopHandling referenceLoopHandling = ReferenceLoopHandling.Serialize)
+		public static string GetObjectContent(object obj, ReferenceLoopHandling referenceLoopHandling = ReferenceLoopHandling.Ignore)
 		{
 			var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = referenceLoopHandling };
 			return JsonConvert.SerializeObject(obj, Formatting.Indented, jsonSettings);

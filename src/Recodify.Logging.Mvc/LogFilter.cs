@@ -96,7 +96,7 @@ namespace Recodify.Logging.Mvc
 			filterContext.HttpContext.Items[outputFilterKey] = filter;
 		}
 
-		private static string GetObjectContent(object obj, ReferenceLoopHandling referenceLoopHandling = ReferenceLoopHandling.Serialize)
+		private static string GetObjectContent(object obj, ReferenceLoopHandling referenceLoopHandling = ReferenceLoopHandling.Ignore)
 		{
 			var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = referenceLoopHandling};
 			return JsonConvert.SerializeObject(obj, Formatting.Indented, jsonSettings);
