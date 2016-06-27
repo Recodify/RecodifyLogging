@@ -1,4 +1,5 @@
 ﻿using Microsoft.Owin;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Security.Principal;
@@ -71,11 +72,17 @@ namespace Recodify.Logging.Common
 			if (IsLegacyRequestContext())
 			{
 				var context = GetLegacyContext();
+
+				if (context == null) return string.Empty;
+
 				return context.Request.UserHostAddress;
 			}
 			else
 			{
-				var context = GetOwinContext();				
+				var context = GetOwinContext();
+
+				if (context == null) return string.Empty;
+
 				return context.Request.RemoteIpAddress;
 			}
 		}
@@ -87,7 +94,7 @@ namespace Recodify.Logging.Common
 
 		private bool IsLegacyRequestContext()
 		{
-			if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.Request != null && System.Web.HttpContext.Current.Items["owin.Environment"] == null)
+			if (System.Web.HttpContext.Current != null && System.Web.HttpContext.Current.Request != null && GetOwinContext() == null)
 				return true;
 
 			return false;
@@ -100,8 +107,18 @@ namespace Recodify.Logging.Common
 
 		private IOwinContext GetOwinContext()
 		{
-		
-			return System.Web.HttpContext.Current.GetOwinContext();
+			if (System.Web.HttpContext.Current == null)
+			{
+				return null;
+			}
+
+			var environment = System.Web.HttpContext.Current.Items["owin.Environment"] as  IDictionary<string, object>;
+			if (environment == null)
+			{
+				return null;
+			}
+
+			return new OwinContext(environment);
 		}
 	}
 }

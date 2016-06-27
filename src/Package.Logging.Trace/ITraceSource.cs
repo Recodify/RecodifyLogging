@@ -15,5 +15,6 @@ namespace Recodify.Logging.Trace
 		void TraceTransfer(int id, string message, Guid relatedActivityId);
 		void TraceResponse(int statusCode, string headers, string content, long timing);
 		void TraceRequest(string requestMethod, string headers, string content);
+		void Close();
 	}
 }

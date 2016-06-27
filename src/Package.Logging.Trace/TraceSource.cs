@@ -10,19 +10,27 @@ namespace Recodify.Logging.Trace
 		private readonly System.Diagnostics.TraceSource traceSource;
 		private readonly System.Diagnostics.TraceSource fallbackTraceSource;
 		private const string fallbackKey = "Fallback";
-		private readonly WebDataEnricher enricher;
+		private readonly IEnricher enricher;
 
 		public TraceSource(string name)
-		{
-			traceSource = new System.Diagnostics.TraceSource(name);
-			fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);
-			enricher = new WebDataEnricher();
-		}		
+			: this (new System.Diagnostics.TraceSource(name), new NullEnricher())
+		{			
+			
+		}
 
-		public TraceSource(string name, SourceLevels defaultLevel)
+		public TraceSource(string name, IEnricher enricher)
+			: this(new System.Diagnostics.TraceSource(name), enricher)
 		{
-			traceSource = new System.Diagnostics.TraceSource(name, defaultLevel);
-		}		
+
+		}
+
+
+		public TraceSource(System.Diagnostics.TraceSource traceSource, IEnricher enricher)
+		{
+			this.traceSource = traceSource;			
+			fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);
+			this.enricher = enricher;
+		}
 
 		public virtual void TraceData(TraceEventType eventType, int id, object data)
 		{
@@ -106,6 +114,12 @@ namespace Recodify.Logging.Trace
 			{
 				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
 			}
+		}
+
+		public void Close()
+		{
+			this.traceSource.Close();
+			this.fallbackTraceSource.Close();
 		}
 
 		private void RaiseTraceResponse(TraceEventType eventType, int statusCode, string headers, string content, long timing)

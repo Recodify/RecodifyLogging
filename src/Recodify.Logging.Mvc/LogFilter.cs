@@ -62,23 +62,52 @@ namespace Recodify.Logging.Mvc
 			{
 				var currentRequest = filterContext.HttpContext.Request;
 				if (IsExcluded(currentRequest.Url.ToString())) return;
+				
+				var responseTime = GetResponseTime(filterContext);
 
-				var timer = filterContext.HttpContext.Items[timerKey] as Stopwatch;
-				timer.Stop();
-
-				var responseContent = GetObjectContent(filterContext.Controller.ViewData.Model);
+				var responseContent = GetModelContent(filterContext);
 
 				var currentResponse = filterContext.HttpContext.Response;
 				responseTraceSource.TraceResponse(
 					currentResponse.StatusCode,
 					currentResponse.Headers.ToString(),
 					responseContent,
-					timer.ElapsedMilliseconds);
+					responseTime);
 			}
 			catch (Exception exp)
 			{				
 				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
 			}
+		}
+
+		private string GetModelContent(ActionExecutedContext filterContext)
+		{
+			if (!options.LogResponse)
+			{
+				return string.Empty;
+			}
+
+			var responseContent =  GetObjectContent(filterContext.Controller.ViewData.Model);
+
+			if (responseContent.Length > options.MaximumResposneSize)
+			{
+				return string.Empty;
+			}
+
+			return responseContent;
+		}
+
+		private static long GetResponseTime(ActionExecutedContext filterContext)
+		{
+			var timer = filterContext.HttpContext.Items[timerKey] as Stopwatch;
+			long responseTime = 0;
+			if (timer != null)
+			{
+				timer.Stop();
+				responseTime = timer.ElapsedMilliseconds;
+			}
+
+			return responseTime;
 		}
 
 		private static void SetupTimer(ActionExecutingContext filterContext)

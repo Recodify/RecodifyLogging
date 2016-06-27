@@ -2,10 +2,24 @@
 using Recodify.Logging.Common;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Recodify.Logging.Trace
 {
-	public class WebDataEnricher
+	public interface IEnricher
+	{
+		object[] Enrich(object[] data, bool preserveOrder = false);
+	}
+
+	public class NullEnricher : IEnricher
+	{
+		public object[] Enrich(object[] data, bool preserveOrder = false)
+		{
+			return data;
+		}
+	}
+
+	public class WebDataEnricher : IEnricher
 	{
 		public object[] Enrich(object[] data, bool preserveOrder = false)
 		{

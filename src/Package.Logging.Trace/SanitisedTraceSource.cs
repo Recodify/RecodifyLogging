@@ -12,20 +12,21 @@ namespace Recodify.Logging.Trace
 		private readonly WebDataEnricher enricher;
 
 		public SanitisedTraceSource(string name, ISanitiser sanitiser)
-			: this(name, sanitiser, new TraceSource(name))
+			: base (name)
 		{
-			enricher = new WebDataEnricher();
-		}
-
-		public SanitisedTraceSource(string name, ISanitiser sanitiser, ITraceSource traceSource)
-			: base(name)
-		{			
 			this.sanitiser = sanitiser;
 		}
 
-		public SanitisedTraceSource(string name, SourceLevels defaulLevel, ISanitiser sanitiser)
-			: base (name, defaulLevel)
-		{		
+		public SanitisedTraceSource(string name, IEnricher enricher, ISanitiser sanitiser)
+			: base(name, enricher)
+		{
+			this.sanitiser = sanitiser;
+		}
+
+
+		public SanitisedTraceSource(System.Diagnostics.TraceSource traceSource, IEnricher enricher, ISanitiser sanitiser)
+			: base(traceSource, enricher)
+		{
 			this.sanitiser = sanitiser;
 		}
 
