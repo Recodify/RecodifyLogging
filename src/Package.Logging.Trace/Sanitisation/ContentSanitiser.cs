@@ -42,7 +42,13 @@ namespace Recodify.Logging.Trace.Sanitisation
 		{
 			get
 			{				
-				var sanitisedFields = CloudConfigurationManager.GetSetting("RecodifyLogging: SantisedFields");
+				var sanitisedFields = CloudConfigurationManager.GetSetting("RecodifyLoggingSantisedFields");
+
+				if (string.IsNullOrWhiteSpace(sanitisedFields))
+				{
+					sanitisedFields = CloudConfigurationManager.GetSetting("RecodifyLogging:SantisedFields");
+				}
+
 				if (string.IsNullOrWhiteSpace(sanitisedFields))
 				{
 					return new string[] { };

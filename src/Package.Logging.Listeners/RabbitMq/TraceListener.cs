@@ -277,11 +277,16 @@ namespace Recodify.Logging.Listeners.RabbitMq
 
         private string GetEnvironment()
         {
-            var environment = CloudConfigurationManager.GetSetting("RecodifyLogging:Environment");
+            var environment = CloudConfigurationManager.GetSetting("RecodifyLoggingEnvironment");
             if (string.IsNullOrWhiteSpace(environment))
             {
-                return "";
-            }
+                environment = CloudConfigurationManager.GetSetting("RecodifyLogging:Environment");
+			}
+
+			if (string.IsNullOrWhiteSpace(environment))
+			{
+				return "";
+			}
 
             return environment;
         }
