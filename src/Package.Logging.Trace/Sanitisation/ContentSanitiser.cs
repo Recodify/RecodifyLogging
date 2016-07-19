@@ -6,6 +6,7 @@ using Newtonsoft.Json.Serialization;
 using System.Configuration;
 using System.Linq;
 using System.Diagnostics;
+using Microsoft.Azure;
 
 namespace Recodify.Logging.Trace.Sanitisation
 {
@@ -41,7 +42,7 @@ namespace Recodify.Logging.Trace.Sanitisation
 		{
 			get
 			{				
-				var sanitisedFields = ConfigurationManager.AppSettings["RecodifyLogging:SantisedFields"];
+				var sanitisedFields = CloudConfigurationManager.GetSetting("RecodifyLogging: SantisedFields");
 				if (string.IsNullOrWhiteSpace(sanitisedFields))
 				{
 					return new string[] { };

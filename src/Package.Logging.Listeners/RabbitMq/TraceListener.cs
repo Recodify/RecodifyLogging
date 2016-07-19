@@ -1,4 +1,5 @@
-﻿using Recodify.Messaging.RabbitMq;
+﻿using Microsoft.Azure;
+using Recodify.Messaging.RabbitMq;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -276,7 +277,7 @@ namespace Recodify.Logging.Listeners.RabbitMq
 
         private string GetEnvironment()
         {
-            var environment = ConfigurationManager.AppSettings["RecodifyLogging:Environment"];
+            var environment = CloudConfigurationManager.GetSetting("RecodifyLogging:Environment");
             if (string.IsNullOrWhiteSpace(environment))
             {
                 return "";
