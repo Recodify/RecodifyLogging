@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Recodify.Logging.Mvc;
+using System;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -22,10 +23,11 @@ namespace TestProject
 		protected void Application_BeginRequest(object sender, EventArgs e)
 		{
 			System.Web.HttpContext.Current.Items.Add("x-sessionid",Guid.NewGuid());
+			LogFilter.SetupTimer(System.Web.HttpContext.Current);
 		}
 
 
-		// This captures the HTML response which is normall overkill for logging with the model representing the state and the html being static.
+		// This captures the HTML response which is normally overkill for logging with the model representing the state and the html being static.
 		/*
 		protected void Application_BeginRequest(object sender, EventArgs e)
 		{

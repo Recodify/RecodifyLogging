@@ -12,8 +12,18 @@ namespace Recodify.Logging.Trace
 	{
 		public static string GetObjectContent(object obj, ReferenceLoopHandling referenceLoopHandling = ReferenceLoopHandling.Ignore)
 		{
-			var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = referenceLoopHandling };
-			return JsonConvert.SerializeObject(obj, Formatting.Indented, jsonSettings);
+			var result = "";
+			try
+			{
+				var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = referenceLoopHandling };
+				result = JsonConvert.SerializeObject(obj, Formatting.Indented, jsonSettings);
+			}
+			catch (Exception exp)
+			{
+				result = $"Error serializing object to type {obj?.GetType()?.FullName}";
+			}
+
+			return result;
 		}
 	}
 }

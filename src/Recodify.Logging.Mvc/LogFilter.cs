@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using System.Threading;
+using System.Web;
 
 namespace Recodify.Logging.Mvc
 {
@@ -42,12 +43,12 @@ namespace Recodify.Logging.Mvc
 
 				if (IsExcluded(currentRequest.Url.ToString())) return;
 				
-				SetupTimer(filterContext);
+				SetupTimer(filterContext.HttpContext.ApplicationInstance.Context);
 
 				var requestContent = currentRequest.ToRaw();
 				requestTraceSource.TraceRequest(
 					currentRequest.HttpMethod,
-					GetObjectContent(currentRequest.Headers.ToDictionary()), 
+					SerializationHelper.GetObjectContent(currentRequest.Headers.ToDictionary()), 
 					requestContent);
 			}
 			catch (Exception exp)
@@ -82,14 +83,14 @@ namespace Recodify.Logging.Mvc
 
 		private string GetModelContent(ActionExecutedContext filterContext)
 		{
-			if (!options.LogResponse)
+			if (!options.LogResponseModel)
 			{
 				return string.Empty;
 			}
 
-			var responseContent =  GetObjectContent(filterContext.Controller.ViewData.Model);
+			var responseContent =  SerializationHelper.GetObjectContent(filterContext.Controller.ViewData.Model);
 
-			if (responseContent.Length > options.MaximumResposneSize)
+			if (responseContent.Length > options.MaximumResponseSize)
 			{
 				return string.Empty;
 			}
@@ -110,11 +111,14 @@ namespace Recodify.Logging.Mvc
 			return responseTime;
 		}
 
-		private static void SetupTimer(ActionExecutingContext filterContext)
+		public static void SetupTimer(System.Web.HttpContext httpContext)
 		{
-			var sw = new Stopwatch();
-			sw.Start();
-			filterContext.HttpContext.Items[timerKey] = sw;
+			if (!httpContext.Items.Contains(timerKey))
+			{
+				var sw = new Stopwatch();
+				sw.Start();
+				httpContext.Items[timerKey] = sw;
+			}		
 		}
 
 		private static void SetupOutputFilter(ActionExecutingContext filterContext)
@@ -124,12 +128,6 @@ namespace Recodify.Logging.Mvc
 			currentResponse.Filter = filter;
 			filterContext.HttpContext.Items[outputFilterKey] = filter;
 		}
-
-		private static string GetObjectContent(object obj, ReferenceLoopHandling referenceLoopHandling = ReferenceLoopHandling.Ignore)
-		{
-			var jsonSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = referenceLoopHandling};
-			return JsonConvert.SerializeObject(obj, Formatting.Indented, jsonSettings);
-		}		
 	
 		private bool IsExcluded(string url)
 		{

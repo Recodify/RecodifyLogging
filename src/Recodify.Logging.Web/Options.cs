@@ -6,8 +6,8 @@ namespace Recodify.Logging.Common
     public interface IOptions
     {
         IEnumerable<string> ExcludeUrls { get; set; }
-		bool LogResponse { get; set; }
-		double MaximumResposneSize { get; set; }
+		bool LogResponseModel { get; set; }
+		double MaximumResponseSize { get; set; }
     }
 
     public class Options : IOptions
@@ -19,8 +19,8 @@ namespace Recodify.Logging.Common
 
         public IEnumerable<string> ExcludeUrls { get; set; }
 
-		public bool LogResponse { get; set;  }
+		public bool LogResponseModel { get; set;  }
 
-		public double MaximumResposneSize { get; set; }		
+		public double MaximumResponseSize { get; set; }		
 	}
 }
