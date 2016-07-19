@@ -64,27 +64,5 @@ namespace Recodify.Messaging.RabbitMq
 		{
 			get { return applicationSettings["RabbitMqManagementPassword"].ToLower(); }
 		}
-    }
-
-    public class ImportDocumentAppSettings : AppSettings
-    {
-        private readonly NameValueCollection applicationSettings;
-
-        public ImportDocumentAppSettings()
-        {
-            applicationSettings = ConfigurationManager.AppSettings;
-        }
-
-        public override string QueueName
-        {
-            get { return applicationSettings["RabbitMqImportDocumentQueueName"].ToLower(); }
-            set { }
-        }
-
-        public override string ExchangeName
-        {
-            get { return applicationSettings["RabbitMqImportDocumentExchangeName"].ToLower(); }
-            set { }
-        }
-    }
+    }  
 }
