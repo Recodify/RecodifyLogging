@@ -9,7 +9,7 @@ namespace Recodify.Logging.Trace
 		public string Name { get; set; }
 		public bool IsAuthenticated { get; set; }
 		public string AuthenticationType { get; set; }
-		public IEnumerable<Claim> Claims { get; set; }
+		public IEnumerable<object> Claims { get; set; }
 		public string Actor { get; set; }		
 		public string NameClaimType { get; set; }
 		public string RoleClaimType { get; set; }

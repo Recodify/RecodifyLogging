@@ -1,5 +1,7 @@
+using System.Diagnostics;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Linq;
 
 namespace Recodify.Logging.Trace
 {
@@ -7,7 +9,7 @@ namespace Recodify.Logging.Trace
 	public static class IIdentityExtensions
 	{
 		public static SerilizableIdentity ToSerializable(this IIdentity identity)
-		{
+		{			
 			if (identity == null)
 			{
 				return new SerilizableIdentity();
@@ -23,7 +25,7 @@ namespace Recodify.Logging.Trace
 			var claimsIdentity = identity as ClaimsIdentity;
 			if (claimsIdentity != null)
 			{
-				result.Claims = claimsIdentity.Claims;
+				result.Claims = claimsIdentity.Claims.Select(x =>  new { Type = x.Type, Value = x.Value, ValueType = x.ValueType, Issue = x.Issuer, OriginalIssuer = x.OriginalIssuer });
 				result.Actor = claimsIdentity.Actor?.ToString();
 				result.Label = claimsIdentity.Label;
 				result.NameClaimType = claimsIdentity.NameClaimType;
