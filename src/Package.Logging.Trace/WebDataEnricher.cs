@@ -3,6 +3,8 @@ using Recodify.Logging.Common;
 using System.Collections.Generic;
 using System.Linq;
 using System;
+using System.Security.Principal;
+using System.Security.Claims;
 
 namespace Recodify.Logging.Trace
 {
@@ -29,9 +31,10 @@ namespace Recodify.Logging.Trace
 			dataList.Add(new KeyValuePair<string, object>("sessionId", httpContext.GetSessionId()));
 			dataList.Add(new KeyValuePair<string, object>("clientip", httpContext.GetClientIp()));
 			dataList.Add(new KeyValuePair<string, object>("isAjax", httpContext.IsAjax()));
-			dataList.Add(new KeyValuePair<string, object>("identity", SerializationHelper.GetObjectContent(httpContext.GetIdentity(), ReferenceLoopHandling.Ignore)));
+			dataList.Add(new KeyValuePair<string, object>("identity", SerializationHelper.GetObjectContent(httpContext.GetIdentity().ToSerializable(), ReferenceLoopHandling.Ignore)));
 			
 			return dataList.ToArray();
 		}	
 	}
+
 }

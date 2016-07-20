@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Collections;
 using System.Collections.Specialized;
+using Recodify.Logging.Trace.Sanitisation;
 
 namespace UnitTests.FullStack
 {
@@ -30,7 +31,7 @@ namespace UnitTests.FullStack
 			}
 
 			set
-			{				
+			{
 			}
 		}
 
@@ -52,13 +53,13 @@ namespace UnitTests.FullStack
 				return new Uri("http://blah.com");
 			}
 		}
-	}	
+	}
 
 	public class TestContext : HttpContextBase
 	{
 		public TestContext()
 		{
-			
+
 		}
 
 		public override IDictionary Items
@@ -87,10 +88,8 @@ namespace UnitTests.FullStack
 	}
 
 	public class SanitisedTraceSourceTests
-	{		
-		[TestCase(10)]
-		[TestCase(100)]
-		[TestCase(200)]
+	{
+		[TestCase(10)]		
 		public void DataSizePerformanceTests(int viewModelSize)
 		{
 			Trace.AutoFlush = true;
@@ -99,25 +98,43 @@ namespace UnitTests.FullStack
 
 			Console.WriteLine("View Model Size: " + viewModelSize);
 
-			var filter = new LogFilter(traceSource, traceSource, new Recodify.Logging.Common.HttpContext(), new Options());			
+			var filter = new LogFilter(traceSource, traceSource, new Recodify.Logging.Common.HttpContext(), new Options());
 
-			var action = new Action(() =>filter.OnActionExecuted(new ActionExecutedContext { Controller = new TestController(dataModel), HttpContext = new TestContext() }));
+			var action = new Action(() => filter.OnActionExecuted(new ActionExecutedContext { Controller = new TestController(dataModel), HttpContext = new TestContext() }));
 
 			var test = new PerformanceTest(action, 10, true);
 
 			test.Perform();
-        }
+		}
+
+		[TestCase(10)]
+		public void DataSizePerformanceTests_Santised(int viewModelSize)
+		{
+			Trace.AutoFlush = true;
+			var traceSource = CreateTraceSource();
+			var dataModel = new DataFactory().CreateViewModelCollection(viewModelSize);
+
+			Console.WriteLine("View Model Size: " + viewModelSize);
+
+			var filter = new LogFilter(traceSource, traceSource, new Recodify.Logging.Common.HttpContext(), new Options());
+
+			var action = new Action(() => filter.OnActionExecuted(new ActionExecutedContext { Controller = new TestController(dataModel), HttpContext = new TestContext() }));
+
+			var test = new PerformanceTest(action, 10, true);
+
+			test.Perform();
+		}
 
 		[Test]
 		public void Simple()
 		{
 			var traceSource = CreateTraceSource();
-			traceSource.TraceEvent(TraceEventType.Error, 1, "my message");		
+			traceSource.TraceEvent(TraceEventType.Error, 1, "my message");
 		}
 
 		//private System.Diagnostics.TraceSource mySource =  new System.Diagnostics.TraceSource("TraceSourceApp"); 
 
-		private Recodify.Logging.Trace.TraceSource CreateTraceSource()
+		private System.Diagnostics.TraceSource CreateDiagTraceSource()
 		{
 			var rabbitmqListener =
 				new Recodify.Logging.Listeners.RabbitMq.TraceListener("events-live,logs-live,logging-test2");
@@ -127,7 +144,21 @@ namespace UnitTests.FullStack
 			mySource.Switch.Level = SourceLevels.All;
 			mySource.Listeners.Remove("Default");
 			mySource.Listeners.Add(rabbitmqListener);
-						
+
+			return mySource;
+		}
+
+		private Recodify.Logging.Trace.TraceSource CreateSantisedTraceSource()
+		{
+			var mySource = CreateDiagTraceSource();
+
+			return new Recodify.Logging.Trace.SanitisedTraceSource(mySource, new WebDataEnricher(), new Sanitiser());
+		}
+
+		private Recodify.Logging.Trace.TraceSource CreateTraceSource()
+		{
+			var mySource = CreateDiagTraceSource();
+
 			return new Recodify.Logging.Trace.TraceSource(mySource, new WebDataEnricher());
 		}
 	}
