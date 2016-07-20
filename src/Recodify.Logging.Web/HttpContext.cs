@@ -67,6 +67,19 @@ namespace Recodify.Logging.Common
 			return sessionid ?? string.Empty;
 		}
 
+		public bool IsAjax()
+		{
+			var currentContext = System.Web.HttpContext.Current;
+			if (currentContext == null || currentContext.Request == null)
+			{
+				return false;
+			}
+
+			var request = currentContext.Request;
+
+			return request["X-Requested-With"] == "XMLHttpRequest" || request.Headers["X-Requested-With"] == "XMLHttpRequest";
+		}
+
 		public string GetClientIp()
 		{		
 			if (IsLegacyRequestContext())

@@ -28,6 +28,7 @@ namespace Recodify.Logging.Trace
 			dataList.Insert(preserveOrder ? data.Length : 0, new KeyValuePair<string, object>("requestUrl", httpContext.GetFullUrlWithMethod()));			
 			dataList.Add(new KeyValuePair<string, object>("sessionId", httpContext.GetSessionId()));
 			dataList.Add(new KeyValuePair<string, object>("clientip", httpContext.GetClientIp()));
+			dataList.Add(new KeyValuePair<string, object>("isAjax", httpContext.IsAjax()));
 			dataList.Add(new KeyValuePair<string, object>("identity", SerializationHelper.GetObjectContent(httpContext.GetIdentity(), ReferenceLoopHandling.Ignore)));
 			
 			return dataList.ToArray();

@@ -12,8 +12,8 @@ namespace TestProject
 		{
 			filters.Add(new HandleErrorAttribute());
 			filters.Add(
-				new LogFilter(new SanitisedTraceSource("requestTraceSource", new Sanitiser()),
-				new SanitisedTraceSource("responseTraceSource", new Sanitiser()), 
+				new LogFilter(new SanitisedTraceSource("requestTraceSource", new WebDataEnricher(), new Sanitiser()),
+				new SanitisedTraceSource("responseTraceSource", new WebDataEnricher(), new Sanitiser()), 
 				new Recodify.Logging.Common.HttpContext(),
 				new Options()));
 		}
