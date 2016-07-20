@@ -24,7 +24,7 @@ namespace Recodify.Logging.Trace
 			if (claimsIdentity != null)
 			{
 				result.Claims = claimsIdentity.Claims;
-				result.Actor = claimsIdentity.Actor.ToString();
+				result.Actor = claimsIdentity.Actor?.ToString();
 				result.Label = claimsIdentity.Label;
 				result.NameClaimType = claimsIdentity.NameClaimType;
 				result.RoleClaimType = claimsIdentity.RoleClaimType;
