@@ -34,68 +34,80 @@ namespace Recodify.Logging.Trace
 
 		public virtual void TraceData(TraceEventType eventType, int id, object data)
 		{
-			var args = enricher.Enrich(new[] { data }, true);
-			traceSource.TraceData(eventType, id, args);
+			Execute(() =>
+			{
+				var args = enricher.Enrich(new[] { data }, true);
+				traceSource.TraceData(eventType, id, args);
+			});
 		}
 
 		public virtual void TraceData(TraceEventType eventType, int id, params object[] data)
 		{
-			data = enricher.Enrich(data);
-			traceSource.TraceData(eventType, id, data);
+			Execute(() =>
+			{
+				data = enricher.Enrich(data);
+				traceSource.TraceData(eventType, id, data);
+			});
 		}
 
 		public virtual void TraceEvent(TraceEventType eventType, int id, string message)
 		{
-			var args = enricher.Enrich(new[] { message }, true);
-			traceSource.TraceData(eventType, id, args);
+			Execute(() =>
+			{
+				var args = enricher.Enrich(new[] { message }, true);
+				traceSource.TraceData(eventType, id, args);
+			});
 		}
 
 		public virtual void TraceEvent(TraceEventType eventType, int id, string format, params object[] args)
 		{
-			args = enricher.Enrich(args);
-			traceSource.TraceData(eventType, id, args);
+			Execute(() => 
+			{
+				args = enricher.Enrich(args);
+				traceSource.TraceData(eventType, id, args);
+			});
 		}
 
 		public virtual void TraceInformation(string message)
 		{
-			var args = enricher.Enrich(new[] { message }, true);
-			traceSource.TraceData(TraceEventType.Information, (int)Event.Information, args);
+			Execute(() =>
+			{
+				var args = enricher.Enrich(new[] { message }, true);
+				traceSource.TraceData(TraceEventType.Information, (int)Event.Information, args);
+			});
 		}
 
 		public virtual void TraceInformation(string format, params object[] args)
 		{
-			args = enricher.Enrich(args);
-			traceSource.TraceInformation(format, args);
+			Execute(() =>
+			{
+				args = enricher.Enrich(args);
+				traceSource.TraceInformation(format, args);
+			});
 		}
 
 		public virtual void TraceTransfer(int id, string message, Guid relatedActivityId)
 		{
-			traceSource.TraceTransfer(id, message, relatedActivityId);
+			Execute(() => traceSource.TraceTransfer(id, message, relatedActivityId));
 		}
 
 		public virtual void TraceRequest(string requestMethod, string headers, string content)
-		{			
-			var fallbackTraceSource = new System.Diagnostics.TraceSource(fallbackKey);
-			
-			try
+		{
+			Execute(() =>
 			{
 				TraceData(
 				   TraceEventType.Information,
-				   (int)EventId.RequestReceived,				   
+				   (int)EventId.RequestReceived,
 				   new KeyValuePair<string, object>("httpMethod", requestMethod),
 				   new KeyValuePair<string, object>("headers", headers),
 				   new KeyValuePair<string, object>("message", content),
-				   new KeyValuePair<string, object>("tags", new[] { "request", "http" }));				 
-			}
-			catch(Exception exp)
-			{
-				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
-			}
+				   new KeyValuePair<string, object>("tags", new[] { "request", "http" }));
+			});
 		}
 
 		public virtual void TraceResponse(int statusCode, string headers, string content, long timing)
 		{
-			try
+			Execute(() =>
 			{
 				if (statusCode < 399)
 				{
@@ -109,17 +121,28 @@ namespace Recodify.Logging.Trace
 				{
 					RaiseTraceResponse(TraceEventType.Error, statusCode, headers, content, timing);
 				}
+			});
+		}
+
+		public void Close()
+		{
+			Execute(() =>
+			{
+				this.traceSource.Close();
+				this.fallbackTraceSource.Close();
+			});
+		}
+
+		protected void Execute(Action action)
+		{
+			try
+			{
+				action();
 			}
 			catch (Exception exp)
 			{
 				fallbackTraceSource.TraceData(TraceEventType.Error, (int)Event.LoggingExceptionFallingBack, exp);
 			}
-		}
-
-		public void Close()
-		{
-			this.traceSource.Close();
-			this.fallbackTraceSource.Close();
 		}
 
 		private void RaiseTraceResponse(TraceEventType eventType, int statusCode, string headers, string content, long timing)

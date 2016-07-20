@@ -32,44 +32,65 @@ namespace Recodify.Logging.Trace
 
 		public override void TraceData(TraceEventType eventType, int id, object data)
 		{
-			base.TraceData(eventType, id, Sanitise(data == null ? string.Empty : data.ToString()));
+			Execute(() =>
+			{
+				base.TraceData(eventType, id, Sanitise(data == null ? string.Empty : data.ToString()));
+			});
 		}
 
 		public override void TraceData(TraceEventType eventType, int id, params object[] data)
-		{			
-			var sanitisedData = data;
-
-			if (data != null && data.Any())
+		{
+			Execute(() =>
 			{
-				sanitisedData = data.Select(o => SantitiseObject(o)).ToArray();
-			}
+				var sanitisedData = data;
 
-			base.TraceData(eventType, id, sanitisedData);
+				if (data != null && data.Any())
+				{
+					sanitisedData = data.Select(o => SantitiseObject(o)).ToArray();
+				}
+
+				base.TraceData(eventType, id, sanitisedData);
+			});
 		}
 
 		public override void TraceEvent(TraceEventType eventType, int id, string message)
 		{
-			base.TraceEvent(eventType, id, Sanitise(message));
+			Execute(() =>
+			{
+				base.TraceEvent(eventType, id, Sanitise(message));
+			});
 		}
 
 		public override void TraceEvent(TraceEventType eventType, int id, string format, params object[] args)
-		{			
-			base.TraceEvent(eventType, id, format, Sanitise(args));
+		{
+			Execute(() =>
+			{
+				base.TraceEvent(eventType, id, format, Sanitise(args));
+			});
 		}
 
 		public override void TraceInformation(string message)
 		{
-			base.TraceInformation(Sanitise(message));
+			Execute(() =>
+			{
+				base.TraceInformation(Sanitise(message));
+			});
 		}
 
 		public override void TraceInformation(string format, params object[] args)
-		{			
-			base.TraceInformation(format, Sanitise(args));
+		{
+			Execute(() =>
+			{
+				base.TraceInformation(format, Sanitise(args));
+			});
 		}
 
 		public override void TraceTransfer(int id, string message, Guid relatedActivityId)
 		{
-			base.TraceTransfer(id, Sanitise(message), relatedActivityId);
+			Execute(() =>
+			{
+				base.TraceTransfer(id, Sanitise(message), relatedActivityId);
+			});
 		}
 
 		private string Sanitise(string input)
