@@ -85,14 +85,14 @@ namespace Recodify.Logging.Mvc
 		{
 			if (!options.LogResponseModel)
 			{
-				return string.Empty;
+				return "Response Not Logged. Set LogResponseModel = true to capture";
 			}
 
 			var responseContent =  SerializationHelper.GetObjectContent(filterContext.Controller.ViewData.Model);
 
 			if (responseContent.Length > options.MaximumResponseSize)
 			{
-				return string.Empty;
+				return "Response Not Logged. As it has exceed the maximum size specified with MaximumResponseSize.";
 			}
 
 			return responseContent;
